@@ -1,0 +1,45 @@
+"""     SConstruct
+#
+"""
+avr = Environment()
+ 
+Target="UartRepeater"
+mcu="atmega328p"
+F_CPU=16e6
+ 
+# Add all additional source files to compile
+src="""fifo.c huart.c main.c suart.c"""
+ 
+# Add Source Path here
+cpppath=""" . """
+
+cpath = """ . """
+ 
+# Optimization level, can be [0, 1, 2, 3, s].
+# 0 = turn off optimization. s = optimize for size.
+# (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
+opt = "s"
+ 
+# Add Additional Compiler Flags
+flags=""" """
+ 
+# Add Variant Dirs
+avr.VariantDir('obj', './lib_mcu/Dali', './lib_mcu/eusart')
+ 
+ 
+# Set Environment Parameters
+avr['CC'] = "avr-gcc -mmcu=%s" % mcu
+avr.Append(CPPPATH = Split(cpppath))
+avr.Append(CCFLAGS = "-O%s" % opt)
+avr.Append(CCFLAGS = "-Wall" )
+avr.Append(CCFLAGS = "-DF_CPU=%i" % F_CPU)
+avr.Append(CCFLAGS = Split(flags))
+ 
+# Execute AVR-GCC
+avr.Program(Target+".elf", Split( src))
+ 
+avr.Command(Target+".hex", Target+".elf", "avr-objcopy -j .text -j .data -O ihex $SOURCE $TARGET")
+# Show memory usage
+avr.Command(None, Target+".elf", "avr-size $SOURCE")
+
+

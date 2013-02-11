@@ -1,0 +1,63 @@
+"""     SConstruct
+#
+#       Copyright 2008 Markus Burrer & CJT, cjt@users.sourceforge.net
+#
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU General Public License for more details.
+#       You should have received a copy of the GNU General Public License
+#       along with this program; if not, write to the Free Software
+#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#       MA 02110-1301, USA.
+"""
+avr = Environment()
+ 
+Target="DaliMaster"
+mcu="at90pwm316"
+F_CPU=16e6
+ 
+# Add all additional source files to compile
+src="""lib_mcu/eusart/eusart_lib.c fifo.c suart.c"""
+ 
+# Add Source Path here
+cpppath=""" .
+            ./lib_mcu/dali
+	    ./lib_mcu/eusart"""
+
+cpath = """ .
+	    ./lib_mcu/dali
+            ./lib_mcu/eusart"""
+ 
+# Optimization level, can be [0, 1, 2, 3, s].
+# 0 = turn off optimization. s = optimize for size.
+# (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
+opt = "s"
+ 
+# Add Additional Compiler Flags
+flags="""-I./lib_mcu/dali,./lib_mcu/eusart """
+ 
+# Add Variant Dirs
+avr.VariantDir('obj', './lib_mcu/Dali', './lib_mcu/eusart')
+ 
+ 
+# Set Environment Parameters
+avr['CC'] = "avr-gcc -mmcu=%s" % mcu
+avr.Append(CPPPATH = Split(cpppath))
+avr.Append(CCFLAGS = "-O%s" % opt)
+avr.Append(CCFLAGS = "-Wall" )
+avr.Append(CCFLAGS = "-DF_CPU=%i" % F_CPU)
+avr.Append(CCFLAGS = Split(flags))
+ 
+# Execute AVR-GCC
+avr.Program(Target+".elf", Split(Target+".c " + src))
+ 
+avr.Command(Target+".hex", Target+".elf", "avr-objcopy -j .text -j .data -O ihex $SOURCE $TARGET")
+# Show memory usage
+avr.Command(None, Target+".elf", "avr-size $SOURCE")
+
+
