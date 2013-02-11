@@ -8,7 +8,7 @@ mcu="at90pwm316"
 F_CPU=16e6
  
 # Add all additional source files to compile
-src="""lib_mcu/eusart/eusart_lib.c fifo.c suart.c"""
+src="""euart.c fifo.c suart.c"""
  
 # Add Source Path here
 cpppath=""" . """
@@ -24,7 +24,7 @@ opt = "s"
 flags=""" """
  
 # Add Variant Dirs
-avr.VariantDir('obj', './lib_mcu/Dali', './lib_mcu/eusart')
+avr.VariantDir('obj', '.', '.')
  
  
 # Set Environment Parameters
