@@ -3,11 +3,11 @@
 #include <avr/power.h>
 #include <avr/interrupt.h>
 
-
+#include "euart.h"
 
 int main()
 {
-	
+	euart_init();
 	
 	return 0;
 }
