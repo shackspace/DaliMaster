@@ -15815,11 +15815,11 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <part name="B1" library="rectifier" deviceset="MB*S" device="" technology="2"/>
 <part name="Q3" library="transistor-npn" deviceset="BC817*" device="SMD" technology="-25"/>
 <part name="D10" library="diode" deviceset="BAS40" device=""/>
-<part name="D11" library="diode" deviceset="BZX84CSMD" device=""/>
+<part name="D11" library="diode" deviceset="BZX84CSMD" device="" value="BZX84CSMD 2V7"/>
 <part name="D9" library="diode" deviceset="BZX85" device=""/>
 <part name="R25" library="resistor" deviceset="R-EU_" device="R0603"/>
 <part name="R23" library="resistor" deviceset="R-EU_" device="R0603"/>
-<part name="R24" library="resistor" deviceset="R-EU_" device="R0603"/>
+<part name="R24" library="resistor" deviceset="R-EU_" device="R0603" value="4R7"/>
 <part name="R21" library="resistor" deviceset="R-EU_" device="R0603"/>
 <part name="R22" library="resistor" deviceset="R-EU_" device="R0603"/>
 <part name="C12" library="resistor" deviceset="CPOL-EU" device="CT6032"/>
@@ -15986,8 +15986,8 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <instance part="C2" gate="G$1" x="17.78" y="55.88"/>
 <instance part="GND15" gate="1" x="17.78" y="22.86"/>
 <instance part="C4" gate="G$1" x="91.44" y="45.72" rot="R180"/>
-<instance part="GND16" gate="1" x="91.44" y="40.64"/>
-<instance part="GND17" gate="1" x="96.52" y="40.64"/>
+<instance part="GND16" gate="1" x="91.44" y="22.86"/>
+<instance part="GND17" gate="1" x="96.52" y="22.86"/>
 <instance part="D1" gate="G$1" x="22.86" y="76.2"/>
 <instance part="P+9" gate="1" x="182.88" y="68.58" rot="R90"/>
 <instance part="GND19" gate="1" x="182.88" y="60.96" rot="R270"/>
@@ -16005,7 +16005,7 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <instance part="TP5" gate="G$1" x="147.32" y="81.28" rot="R90"/>
 <instance part="TP8" gate="G$1" x="236.22" y="147.32"/>
 <instance part="TP9" gate="G$1" x="226.06" y="22.86" rot="R180"/>
-<instance part="TP10" gate="G$1" x="177.8" y="76.2" rot="R90"/>
+<instance part="TP10" gate="G$1" x="182.88" y="76.2" rot="R90"/>
 <instance part="GND6" gate="1" x="314.96" y="38.1" rot="R90"/>
 <instance part="P+7" gate="1" x="314.96" y="43.18" rot="R270"/>
 <instance part="R7" gate="G$1" x="215.9" y="101.6" rot="R90"/>
@@ -16043,9 +16043,9 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <instance part="R1" gate="G$1" x="22.86" y="40.64" rot="R270"/>
 <instance part="GND4" gate="1" x="22.86" y="22.86"/>
 <instance part="C3" gate="G$1" x="66.04" y="55.88"/>
-<instance part="GND13" gate="1" x="66.04" y="38.1"/>
+<instance part="GND13" gate="1" x="66.04" y="40.64"/>
 <instance part="R3" gate="G$1" x="53.34" y="30.48" rot="R90"/>
-<instance part="R4" gate="G$1" x="78.74" y="43.18" rot="R180"/>
+<instance part="R4" gate="G$1" x="78.74" y="35.56" rot="R180"/>
 <instance part="GND23" gate="1" x="53.34" y="22.86"/>
 <instance part="P+13" gate="G$1" x="449.58" y="58.42" rot="R270"/>
 <instance part="GND24" gate="1" x="447.04" y="43.18" rot="R90"/>
@@ -16099,8 +16099,8 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <segment>
 <pinref part="TP10" gate="G$1" pin="TP"/>
 <pinref part="U$2" gate="G$1" pin="PD3"/>
-<wire x1="180.34" y1="76.2" x2="200.66" y2="76.2" width="0.1524" layer="91"/>
-<label x="180.34" y="76.2" size="1.778" layer="95"/>
+<wire x1="185.42" y1="76.2" x2="200.66" y2="76.2" width="0.1524" layer="91"/>
+<label x="185.42" y="76.2" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="304.8" y1="40.64" x2="312.42" y2="40.64" width="0.1524" layer="91"/>
@@ -16247,10 +16247,12 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <segment>
 <pinref part="C4" gate="G$1" pin="1"/>
 <pinref part="GND16" gate="1" pin="GND"/>
+<wire x1="91.44" y1="25.4" x2="91.44" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND17" gate="1" pin="GND"/>
 <pinref part="C5" gate="G$1" pin="-"/>
+<wire x1="96.52" y1="25.4" x2="96.52" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="2"/>
@@ -16309,7 +16311,6 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <segment>
 <pinref part="D3" gate="G$1" pin="A"/>
 <pinref part="GND13" gate="1" pin="GND"/>
-<wire x1="66.04" y1="43.18" x2="66.04" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
@@ -16395,8 +16396,8 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <wire x1="91.44" y1="58.42" x2="91.44" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="91.44" y1="50.8" x2="88.9" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="R4" gate="G$1" pin="1"/>
-<wire x1="83.82" y1="43.18" x2="88.9" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="43.18" x2="88.9" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="35.56" x2="88.9" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="88.9" y1="35.56" x2="88.9" y2="50.8" width="0.1524" layer="91"/>
 <junction x="88.9" y="50.8"/>
 </segment>
 <segment>
@@ -16716,9 +16717,7 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <pinref part="R3" gate="G$1" pin="2"/>
 <pinref part="R4" gate="G$1" pin="2"/>
 <pinref part="R4" gate="G$1" pin="2"/>
-<wire x1="73.66" y1="43.18" x2="71.12" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="43.18" x2="71.12" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="35.56" x2="53.34" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="35.56" x2="53.34" y2="35.56" width="0.1524" layer="91"/>
 <junction x="53.34" y="35.56"/>
 </segment>
 </net>
