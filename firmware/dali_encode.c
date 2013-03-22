@@ -13,7 +13,7 @@ inline int dali_slave_direct_arc(word *output, byte address, byte brightness)
 	return 0;
 }
 
-inline int dali_slave_commad(word *output, byte address, byte command)
+inline int dali_slave_command(word *output, byte address, byte command)
 {
 	if(address > 63)
 		return _ERR_WRONG_ADDRESS_;
