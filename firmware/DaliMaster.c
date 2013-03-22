@@ -3,11 +3,11 @@
 #include <avr/power.h>
 #include <avr/interrupt.h>
 
-#include "euart.h"
+#include "dali.h"
 
 int main()
 {
-	euart_init();
+	dali_init();
 	
 	return 0;
 }

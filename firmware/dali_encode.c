@@ -6,7 +6,10 @@ inline int dali_slave_direct_arc(word *output, byte address, byte brightness)
 	{
 		return _ERR_WRONG_ADDRESS_;
 	}
-	*output = (0x80 + (address << 1)) << 8 + brightness; //Frame: 1AAAAAA0 BBBBBBBB
+
+	brightness = brightness > 254 ? 254 : brightness; //direct arc value can be 254 maximum
+	
+	*output = ((0x80 + (address << 1)) << 8) + brightness; //Frame: 1AAAAAA0 BBBBBBBB
 	return 0;
 }
 
@@ -24,12 +27,25 @@ inline int dali_slave_commad(word *output, byte address, byte command)
 		return _ERR_RESERVED_COMMAND_;
 	if(!((command & 0xE0) ^ 0xC0)) //command 110xxxxx is reserved
 		return _ERR_RESERVED_COMMAND_;
-	*output = (0x81 + (address << 1)) << 8 + command;  //Frame: 1AAAAAA1 CCCCCCCC
+	
+	*output = ((0x81 + (address << 1)) << 8) + command;  //Frame: 1AAAAAA1 CCCCCCCC
 	return 0;
 }
 
 inline int dali_special_command(word *output, special_commands command, byte data)
 {	
+	switch(command)
+	{
+	default:
+		return _ERR_WRONG_COMMAND_;
+		break;
+	INITIALIZE:
+		*output = 0xA500 + data;  //Frame: 1010 0101 xxxx xxxx
+		break;
+	ROMDAMIZE:
+		*output = 0xA700;   //1010 0111 0000 0000 
+		break;
+	}	
 	return 0;
 }
 
