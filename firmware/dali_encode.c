@@ -40,10 +40,10 @@ inline int dali_special_command(word *output, special_commands command, byte dat
 		return _ERR_WRONG_COMMAND_;
 		break;
 	INITIALIZE:
-		*output = 0xA500 + data;  //Frame: 1010 0101 xxxx xxxx
+		*output = DALI_INITIALISE << 8 + data;  //Frame: 1010 0101 xxxx xxxx
 		break;
-	ROMDAMIZE:
-		*output = 0xA700;   //1010 0111 0000 0000 
+	RAMDOMIZE:
+		*output = DALI_RANDOMISE << 8;   //1010 0111 0000 0000 
 		break;
 	}	
 	return 0;

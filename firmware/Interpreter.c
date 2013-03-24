@@ -1,12 +1,16 @@
 #include "Interpreter.h"
 #include "dali_encode.h"
 
-
 #ifdef TEST
-char const identifier_message[] = "DALI Master\r\n";
+#define _PROGMEM
 #else
-char const __attribute__((__progmem__)) identifier_message[] = "DALI Master\r\n";
+#define _PROGMEM __attribute__((__progmem__))
 #endif
+
+char const _PROGMEM identifier_message[] = "DALI Master\r\n";
+char const _PROGMEM string_randomize[] = "randomize";
+char const _PROGMEM string_initialize[] = "initialize";
+char const _PROGMEM string_arc[] = "arc";
 
 
 byte buffer[MAX_BUFFER_LENGTH];

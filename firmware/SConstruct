@@ -8,7 +8,7 @@ mcu="at90pwm316"
 F_CPU=16e6
  
 # Add all additional source files to compile
-src="""dali.c dali_encode.c euart.c fifo.c suart.c"""
+src="""dali.c dali_encode.c euart.c fifo.c Interpreter.c suart.c"""
  
 # Add Source Path here
 cpppath=""" . """
