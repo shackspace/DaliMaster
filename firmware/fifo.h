@@ -71,5 +71,18 @@ _inline_fifo_get (fifo_t *f)
 	return data;
 }
 
+static inline uint8_t 
+_inline_fifo_get_chars (fifo_t *f, uint8_t* buf, const uint8_t size)
+{
+	uint8_t i;
+	for(i = 0; i < size && f->count > 0; i++)
+	{
+		*buf = _inline_fifo_get (f);
+		buf++;
+	}
+	return i;
+}
+
+
 #endif /* FIFO_H */
 
