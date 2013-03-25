@@ -10,6 +10,7 @@ extern void suart_init();
 
 #ifdef SUART_TXD
     extern void suart_putc (const char);
+    extern void suart_putstring(char*);
 #endif // SUART_RXD
 
 #ifdef SUART_RXD

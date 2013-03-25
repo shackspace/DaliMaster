@@ -31,8 +31,35 @@ inline char ascii_to_nibble(char nibble)
 		return -1;
 }
 
+inline int parse_int(char* string)
+{
+	int i = 0;
+	byte sign = 0;
+	
+	if(*string == '-')
+	{	
+		sign = !0;
+		string++;
+	}
+
+	if(isdigit(*string) && (*string != 0))
+	{
+		i *= 10;
+		i += atoi(*string);
+	}
+	else if(sign)
+	{
+		return -i;
+	}
+	else
+	{
+		return i;
+	}
+}
+
 int decode_command_to_frame(char* token, word* output)
 {
+		
 	return _ERR_UNIMPLEMENTED_;
 }
 

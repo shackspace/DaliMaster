@@ -90,6 +90,15 @@ void suart_putc (const char c)
 
     sei();
 }
+
+void suart_putstring(char* string)
+{
+    while(*string)
+    {
+        suart_putc(*string);
+        string++;
+    }
+}
 #endif // SUART_TXD 
 
 #ifdef SUART_TXD
