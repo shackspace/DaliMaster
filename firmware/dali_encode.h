@@ -16,7 +16,8 @@ typedef unsigned char  byte;
 #define _ERR_OK_                0
 #define _ERR_WRONG_COMMAND_    -2
 #define _ERR_RESERVED_COMMAND_ -3
-#define _MODE_REPEAT_TWICE_    40
+#define _MODE_SIMPLE_          40
+#define _MODE_REPEAT_TWICE_    41
 #define _MODE_QUERY_           42
 
 #define dali_command_initialize_broadcast(output) dali_special_command(output, INITIALIZE, 0xFF)
@@ -24,7 +25,7 @@ typedef unsigned char  byte;
 #define dali_command_terminate(output) dali_special_command(output, RANDOMIZE)
 #define dali_command_off(output,address) dali_slave_command(output,address,0x00) 
 
-typedef enum {RANDOMIZE, INITIALIZE, TERMINATE} special_commands;
+typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT_ADDRESS, STORE_DTR} special_commands;
 
 inline int dali_slave_direct_arc(word *output, byte address, byte brightness);
 

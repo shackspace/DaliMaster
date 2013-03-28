@@ -16,7 +16,8 @@ int main()
 	int ret;
 
 	//buffer for temporary strings
-	byte temp[MAX_BUFFER_LENGTH];
+	byte temp[MAX_BUFFER_LENGTH+1];
+	memset(&temp, 0, MAX_BUFFER_LENGTH+1); //clear temp buffer for new strings
 
 	suart_init();
 	dali_init();
@@ -32,7 +33,7 @@ int main()
 			_inline_fifo_get_chars( &fifo, temp, fifo.count);
 			if(ret = decode_command_to_frame(temp, &frame) >= 0)
 			{
-				if(_ERR_OK_ == ret)
+				if(_MODE_SIMPLE_ == ret)
 				{ 
 					dali_send(frame);
 					suart_putstring("ACK\n");
@@ -56,6 +57,8 @@ int main()
 			{
 				suart_putstring("NACK\n");
 			}
+
+			memset(&temp, 0, MAX_BUFFER_LENGTH+1); //clear temp buffer for new strings
 		}		
 	}
 	

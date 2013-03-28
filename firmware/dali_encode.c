@@ -40,11 +40,27 @@ inline int dali_special_command(word *output, special_commands command, byte dat
 		return _ERR_WRONG_COMMAND_;
 		break;
 	INITIALIZE:
-		*output = DALI_INITIALISE << 8 + data;  //Frame: 1010 0101 xxxx xxxx
+		*output = (DALI_INITIALISE << 8) + data;  //Frame: 1010 0101 xxxx xxxx
 		break;
 	RAMDOMIZE:
 		*output = DALI_RANDOMISE << 8;   //1010 0111 0000 0000 
 		break;
+	TERMINATE:
+		*output = DALI_TERMINATE << 8;   //1010 0001 0000 0000 
+		break;
+	STORE_DTR:
+		*output = (DALI_DATA_TRANSFER_REGISTER << 8) + data;
+		break;
+	PROGRAM_SHORT_ADDRESS:
+		*output = (DALI_PROGRAM_SHORT_ADDRESS << 8) + 0x01 + ((0x3F & data) << 1); //1011 0111 0xxx xxx1 
+		break;
+	COMPARE:
+		*output = DALI_COMPARE << 8;
+		break;
+	WITHDRAW:
+		*output = DALI_WITHDRAW << 8;
+		break;
+
 	}	
 	return 0;
 }
