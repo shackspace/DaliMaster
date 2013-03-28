@@ -21,17 +21,17 @@ typedef unsigned char  byte;
 #define _MODE_QUERY_           42
 
 #define dali_command_initialize_broadcast(output) dali_special_command(output, INITIALIZE, 0xFF)
-#define dali_command_randomize(output) dali_special_command(output, RANDOMIZE)
-#define dali_command_terminate(output) dali_special_command(output, RANDOMIZE)
+#define dali_command_randomize(output) dali_special_command(output, RANDOMIZE, 0)
+#define dali_command_terminate(output) dali_special_command(output, RANDOMIZE, 0)
 #define dali_command_off(output,address) dali_slave_command(output,address,0x00) 
 
-typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT_ADDRESS, STORE_DTR} special_commands;
+typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT_ADDRESS, STORE_DTR} special_command_type;
 
 inline int dali_slave_direct_arc(word *output, byte address, byte brightness);
 
 inline int dali_slave_command(word *output, byte address, byte command);
 
-inline int dali_special_command(word *output, special_commands command, byte data);
+inline int dali_special_command(word *output, special_command_type command, byte data);
 
 #ifdef __cplusplus
 }

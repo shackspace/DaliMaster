@@ -32,7 +32,7 @@ inline int dali_slave_command(word *output, byte address, byte command)
 	return 0;
 }
 
-inline int dali_special_command(word *output, special_commands command, byte data)
+inline int dali_special_command(word *output, special_command_type command, byte data)
 {	
 	switch(command)
 	{
