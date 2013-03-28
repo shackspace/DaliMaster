@@ -17,6 +17,7 @@ typedef unsigned char  byte;
 #define _ERR_WRONG_COMMAND_    -2
 #define _ERR_RESERVED_COMMAND_ -3
 #define _MODE_REPEAT_TWICE_    40
+#define _MODE_QUERY_           42
 
 #define dali_command_initialize_broadcast(output) dali_special_command(output, INITIALIZE, 0xFF)
 #define dali_command_randomize(output) dali_special_command(output, RANDOMIZE)

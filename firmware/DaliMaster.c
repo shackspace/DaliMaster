@@ -32,15 +32,25 @@ int main()
 			_inline_fifo_get_chars( &fifo, temp, fifo.count);
 			if(ret = decode_command_to_frame(temp, &frame) >= 0)
 			{
-				if(_ERR_OK_)
+				if(_ERR_OK_ == ret)
+				{ 
 					dali_send(frame);
-				if(_MODE_REPEAT_TWICE_)
-				{
-					dali_send(frame);
-					_delay_ms(50);
-					dali_send(frame);
+					suart_putstring("ACK\n");
 				}
-				suart_putstring("ACK\n");
+				else if(_MODE_REPEAT_TWICE_ == ret)
+				{
+					dali_send_with_repeat(frame);
+					suart_putstring("ACK\n");
+				}
+				else if(_MODE_QUERY_ == ret)
+				{
+					byte ans;
+					dali_query(frame, &ans);
+					suart_putstring("ANS ");
+					suart_putc(nibble_to_ascii(ans >> 4));
+					suart_putc(nibble_to_ascii(ans & 0x0F));
+					suart_putc('\n');
+				}
 			}
 			else
 			{

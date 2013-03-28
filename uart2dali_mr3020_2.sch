@@ -15909,22 +15909,22 @@ Es wird keine Haftung für die Korrektheit übernommen!
 <part name="GND23" library="supply1" deviceset="GND" device=""/>
 <part name="P+13" library="supply1" deviceset="VCC/2" device=""/>
 <part name="GND24" library="supply1" deviceset="GNDA" device=""/>
-<part name="R19" library="resistor" deviceset="R-EU_" device="R0603"/>
+<part name="R19" library="resistor" deviceset="R-EU_" device="R0603" value="1"/>
 <part name="D7" library="diode" deviceset="MBRS130LT3" device=""/>
 <part name="GND25" library="supply1" deviceset="GND" device=""/>
 <part name="GND26" library="supply1" deviceset="GND" device=""/>
-<part name="R18" library="resistor" deviceset="R-EU_" device="R0603"/>
-<part name="R13" library="resistor" deviceset="R-EU_" device="R0603"/>
+<part name="R18" library="resistor" deviceset="R-EU_" device="R0603" value="2k2"/>
+<part name="R13" library="resistor" deviceset="R-EU_" device="R0603" value="3k9"/>
 <part name="C11" library="resistor" deviceset="C-EU" device="C0805"/>
 <part name="GND28" library="supply1" deviceset="GND" device=""/>
 <part name="GND29" library="supply1" deviceset="GND" device=""/>
-<part name="R17" library="resistor" deviceset="R-EU_" device="R0603"/>
-<part name="R16" library="resistor" deviceset="R-EU_" device="R0603"/>
+<part name="R17" library="resistor" deviceset="R-EU_" device="R0603" value="2k2"/>
+<part name="R16" library="resistor" deviceset="R-EU_" device="R0603" value="1M"/>
 <part name="GND30" library="supply1" deviceset="GND" device=""/>
-<part name="D6" library="diode" deviceset="BZX84CSMD" device=""/>
-<part name="R15" library="resistor" deviceset="R-EU_" device="R0603"/>
-<part name="R14" library="resistor" deviceset="R-EU_" device="R0603"/>
-<part name="D5" library="diode" deviceset="BZX84CSMD" device=""/>
+<part name="D6" library="diode" deviceset="BZX84CSMD" device="" value="BZX84CSMD12V"/>
+<part name="R15" library="resistor" deviceset="R-EU_" device="R0603" value="2k2"/>
+<part name="R14" library="resistor" deviceset="R-EU_" device="R0603" value="33k"/>
+<part name="D5" library="diode" deviceset="BZX84CSMD" device="" value="BZX84CSMD3v3"/>
 <part name="C10" library="resistor" deviceset="C-EU" device="C0603"/>
 <part name="GND31" library="supply1" deviceset="GND" device=""/>
 <part name="VDD1" library="supply1" deviceset="VDD" device=""/>

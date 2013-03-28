@@ -15,6 +15,10 @@ extern "C"
 #define _ERR_BUFFER_FULL_ -254
 #define _ERR_UNIMPLEMENTED_ -256
 
+inline char nibble_to_ascii(uint8_t nibble);
+
+inline char ascii_to_nibble(char nibble);
+
 int decode_command_to_frame(char* token, word* output);
 
 void get_substring(char* src, char* dest, unsigned int begin, unsigned int end);
