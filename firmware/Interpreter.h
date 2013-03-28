@@ -5,6 +5,7 @@
 #include "dali_encode.h"
 #include "fifo.h"
 
+
 #ifdef __cplusplus
 extern "C"
 {

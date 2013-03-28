@@ -4,30 +4,33 @@
 #ifdef TEST
 #define _PROGMEM
 #else
-#define _PROGMEM __attribute__((__progmem__))
+#define _PROGMEM const __attribute__((__progmem__))
 #endif
 
 typedef byte bool;
 #define FALSE 0
 #define TRUE !0
 
-char const _PROGMEM identifier_message[] = "DALI Master\r\n";
+char _PROGMEM identifier_message[] = "DALI Master\r\n";
+
+char _PROGMEM group_postfix[] = "_g";
 
 //special commands
-char const _PROGMEM command_randomize[] = "randomize";
-char const _PROGMEM command_initialize[] = "initialize";
+char _PROGMEM command_randomize[] = "randomize";
+char _PROGMEM command_initialize[] = "initialize";
 
 //set level directly
-char const _PROGMEM command_arc[] = "arc";
+char _PROGMEM command_arc[] = "arc";
+char _PROGMEM command_arc_group[] = "arc_g";
 
 //arc commands
-char const _PROGMEM command_up[] = "up";
-char const _PROGMEM command_down[] = "down";
-char const _PROGMEM command_step_up[] = "step_up";
-char const _PROGMEM command_step_down[] = "step_down";
-char const _PROGMEM command_goto_scene[] = "scene";
-char const _PROGMEM command_max_level[] = "max";
-char const _PROGMEM command_min_level[] = "min";
+char _PROGMEM command_up[] = "up";
+char _PROGMEM command_down[] = "down";
+char _PROGMEM command_step_up[] = "step_up";
+char _PROGMEM command_step_down[] = "step_down";
+char _PROGMEM command_goto_scene[] = "scene";
+char _PROGMEM command_max_level[] = "max";
+char _PROGMEM command_min_level[] = "min";
 
 typedef struct key_value_mode	
 {
@@ -118,6 +121,7 @@ inline int parse_int(char* string, int* integer)
 int decode_command_to_frame(char* token, word* output)
 {
 	char command[MAX_COMMAND_LENGTH+1] = {0};
+	char groupify[MAX_COMMAND_LENGTH] = {0};
 	char param1_string[MAX_COMMAND_LENGTH+1] = {0};
 	char param2_string[MAX_COMMAND_LENGTH+1] = {0};
 	bool has_param1 = FALSE;
@@ -126,6 +130,7 @@ int decode_command_to_frame(char* token, word* output)
 	int16_t param2 = 0;
 	uint16_t i;
 	uint16_t u;
+	int ret;
 	const uint16_t length = strlen(token);
 	if(length == 0)
 		return _ERR_PARSE_ERROR_;
@@ -179,18 +184,51 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(has_param1 && has_param2)
 		{
-			dali_slave_direct_arc(output, param1, param2);
-			return _ERR_OK_;
+			ret = dali_slave_direct_arc(output, param1, param2);
+			if(ret == _ERR_OK_)
+				return _MODE_SIMPLE_;
+			else return ret;
 		}
 		return _ERR_PARSE_ERROR_;
 	}
+
+	if(!strcmp(command_arc_group, command))
+	{
+		if(has_param1 && has_param2)
+		{
+			ret = dali_group_direct_arc(output, param1, param2);
+			if(ret == _ERR_OK_)
+				return _MODE_SIMPLE_;
+			else return ret;
+		}
+		return _ERR_PARSE_ERROR_;
+	}
+
 
 	for(i = 0; i < COUNT_COMMANDS; i++)
 	{
 		if(!strcmp(command_list[i].key, command))
 		{
-			dali_slave_command(output, param1, command_list[i].value);
-			return _ERR_OK_;
+			ret = dali_slave_command(output, param1, command_list[i].value);
+			if(ret == _ERR_OK_)
+				return command_list[i].mode;
+			else
+				return ret;
+		}
+	}
+
+
+	for(i = 0; i < COUNT_COMMANDS; i++)
+	{
+		strcpy(command_list[i].key, groupify);
+		strcat(groupify, group_postfix);
+		if(!strcmp(groupify, command))
+		{
+			ret = dali_slave_command(output, param1, command_list[i].value);
+			if(ret == _ERR_OK_)
+				return command_list[i].mode;
+			else
+				return ret;
 		}
 	}
 
@@ -198,8 +236,11 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(!strcmp(special_command_list[i].key, command))
 		{
-			dali_special_command(output, special_command_list[i].special, param1);
-			return _ERR_OK_;
+			ret = dali_special_command(output, special_command_list[i].special, param1);
+			if(ret == _ERR_OK_)
+				return special_command_list[i].mode;
+			else
+				return ret;
 		}
 	}
 	

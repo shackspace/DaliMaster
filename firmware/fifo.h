@@ -1,8 +1,14 @@
 #ifndef _FIFO_H_
 #define _FIFO_H_
 
+#ifndef TEST
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#else
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef short int16_t;	
+#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -44,11 +50,13 @@ _inline_fifo_put (fifo_t *f, const uint8_t data)
 	f->write2end = write2end;
 	f->pwrite = pwrite;
 
+#ifndef TEST
 	uint8_t sreg = SREG;
 	cli();
 	f->count++;
 	SREG = sreg;
-	
+#endif
+
 	return 1;
 }
 
@@ -68,10 +76,12 @@ _inline_fifo_get (fifo_t *f)
 	f->pread = pread;
 	f->read2end = read2end;
 	
+#ifndef TEST
 	uint8_t sreg = SREG;
 	cli();
 	f->count--;
 	SREG = sreg;
+#endif
 	
 	return data;
 }

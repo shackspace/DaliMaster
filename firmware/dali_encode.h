@@ -2,7 +2,9 @@
 #define __DALI_ENCODE__
 
 #include "dali_codes.h"
+#ifndef TEST
 #include <avr/io.h>
+#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -30,6 +32,10 @@ typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT
 inline int dali_slave_direct_arc(word *output, byte address, byte brightness);
 
 inline int dali_slave_command(word *output, byte address, byte command);
+
+inline int dali_group_direct_arc(word *output, byte address, byte brightness);
+
+inline int dali_group_command(word *output, byte address, byte command);
 
 inline int dali_special_command(word *output, special_command_type command, byte data);
 
