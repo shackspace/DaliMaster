@@ -6,6 +6,11 @@
 #define SUART_TXD
 #define SUART_RXD
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 extern void suart_init();
 
 #ifdef SUART_TXD
@@ -17,6 +22,10 @@ extern void suart_init();
     extern int suart_getc_wait ();
     extern int suart_getc_nowait();
 #endif // SUART_RXD
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _UART_H_ */
 

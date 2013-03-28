@@ -3,6 +3,11 @@
 
 #include <avr/io.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #if (defined __C51__)
 typedef bit                 Bool;    // Shall be used with _MEM_TYPE_BIT_ to optimize the memory.
 #else
@@ -52,5 +57,8 @@ Bool euart_rx_ready(void);
 
 Uint8 euart_get(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

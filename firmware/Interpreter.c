@@ -164,10 +164,16 @@ int decode_command_to_frame(char* token, word* output)
 		param1_string[2-u] = token[i];
 	}
 
-	if(_ERR_OK_ != parse_int(param1_string, &param1))
-		return _ERR_PARSE_ERROR_;
-	if(_ERR_OK_ !=  parse_int(param2_string, &param2))
-		return _ERR_PARSE_ERROR_;
+	if(has_param1)
+	{
+		if(_ERR_OK_ != parse_int(param1_string, &param1))
+			return _ERR_PARSE_ERROR_;
+	}
+	if(has_param2)
+	{
+		if(_ERR_OK_ !=  parse_int(param2_string, &param2))
+			return _ERR_PARSE_ERROR_;
+	}
 	
 	if(!strcmp(command_arc, command))
 	{
@@ -183,7 +189,16 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(!strcmp(command_list[i].key, command))
 		{
-			dali_slave_command(output, param1, param2);
+			dali_slave_command(output, param1, command_list[i].value);
+			return _ERR_OK_;
+		}
+	}
+
+	for(i = 0; i < COUNT_SPECIAL_COMMANDS; i++)
+	{
+		if(!strcmp(special_command_list[i].key, command))
+		{
+			dali_special_command(output, special_command_list[i].special, param1);
 			return _ERR_OK_;
 		}
 	}

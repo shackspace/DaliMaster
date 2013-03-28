@@ -4,6 +4,11 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct
 {
 	uint8_t volatile count;       // # Zeichen im Puffer
@@ -83,6 +88,9 @@ _inline_fifo_get_chars (fifo_t *f, uint8_t* buf, const uint8_t size)
 	return i;
 }
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* FIFO_H */
 
