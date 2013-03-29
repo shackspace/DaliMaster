@@ -31,11 +31,15 @@ typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT
 
 int dali_slave_direct_arc(word *output, byte address, byte brightness);
 
-int dali_slave_command(word *output, byte address, byte command);
-
 int dali_group_direct_arc(word *output, byte address, byte brightness);
 
+int dali_slave_command(word *output, byte address, byte command);
+
 int dali_group_command(word *output, byte address, byte command);
+
+int dali_slave_command_with_param(word *output, byte address, byte command, byte param);
+
+int dali_group_command_with_param(word *output, byte address, byte command, byte param);
 
 int dali_special_command(word *output, special_command_type command, byte data);
 

@@ -31,11 +31,26 @@ TEST(TestEncoderCommands,POSITIVE)
 
 	EXPECT_EQ(_ERR_WRONG_ADDRESS_, dali_slave_command(&temp, 64, 0));
 
-	dali_group_command(&temp, 0x3F, 0x7F);
+    dali_group_command(&temp, 0x0F, 0x7F);
 	
-	EXPECT_EQ(0x7F7F, temp);
+    EXPECT_EQ(0x9F7F, temp);
 
 	EXPECT_EQ(_ERR_WRONG_ADDRESS_, dali_group_command(&temp, 64, 0));
+
+    EXPECT_EQ(_ERR_WRONG_COMMAND_, dali_group_command(&temp, 0, DALI_GO_TO_SCENE));
+}
+
+TEST(TestEncoderCommandsWithParam,POSITIVE)
+{
+    word temp;
+
+    dali_slave_command_with_param(&temp, 0x3F, DALI_GO_TO_SCENE, 4);
+
+    EXPECT_EQ(0x7F14, temp);
+
+    dali_group_command_with_param(&temp, 0x0F, DALI_GO_TO_SCENE, 4);
+
+    EXPECT_EQ(0x9F14, temp);
 }
 
 TEST(TestEncoderSpecialCommands,POSITIVE)

@@ -33,6 +33,7 @@ avr.Append(CPPPATH = Split(cpppath))
 avr.Append(CCFLAGS = "-O%s" % opt)
 avr.Append(CCFLAGS = "-Wall" )
 avr.Append(CCFLAGS = "-DF_CPU=%i" % F_CPU)
+avr.Append(CCFLAGS = "-std=c99")
 avr.Append(CCFLAGS = Split(flags))
  
 # Execute AVR-GCC

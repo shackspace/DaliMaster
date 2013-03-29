@@ -13,6 +13,19 @@ int dali_slave_direct_arc(word *output, byte address, byte brightness)
 	return _ERR_OK_;
 }
 
+int dali_group_direct_arc(word *output, byte address, byte brightness)
+{
+	if(address > 15)
+	{
+		return _ERR_WRONG_ADDRESS_;
+	}
+
+	brightness = brightness > 254 ? 254 : brightness; //direct arc value can be 254 maximum
+	
+	*output = ((0x80 + (address << 1)) << 8) + brightness; //Frame: 100AAAA0 BBBBBBBB
+	return _ERR_OK_;
+}
+
 int dali_slave_command(word *output, byte address, byte command)
 {
 	if(address > 63)
@@ -27,21 +40,16 @@ int dali_slave_command(word *output, byte address, byte command)
 		return _ERR_RESERVED_COMMAND_;
 	if(!((command & 0xE0) ^ 0xC0)) //command 110xxxxx is reserved
 		return _ERR_RESERVED_COMMAND_;
+
+	if((command == DALI_GO_TO_SCENE) || 
+	(command == DALI_STORE_THE_DTR_AS_SCENE) || 
+	(command == DALI_REMOVE_FROM_SCENE) ||
+	(command == DALI_ADD_TO_GROUP) ||
+	(command == DALI_REMOVE_FROM_GROUP) ||
+	(command == DALI_QUERY_SCENE_LEVEL))
+		return _ERR_WRONG_COMMAND_;
 	
 	*output = ((0x01 + (address << 1)) << 8) + command;  //Frame: 0AAAAAA1 CCCCCCCC
-	return _ERR_OK_;
-}
-
-int dali_group_direct_arc(word *output, byte address, byte brightness)
-{
-	if(address > 15)
-	{
-		return _ERR_WRONG_ADDRESS_;
-	}
-
-	brightness = brightness > 254 ? 254 : brightness; //direct arc value can be 254 maximum
-	
-	*output = ((0x80 + (address << 1)) << 8) + brightness; //Frame: 100AAAA0 BBBBBBBB
 	return _ERR_OK_;
 }
 
@@ -59,9 +67,59 @@ int dali_group_command(word *output, byte address, byte command)
 		return _ERR_RESERVED_COMMAND_;
 	if(!((command & 0xE0) ^ 0xC0)) //command 110xxxxx is reserved
 		return _ERR_RESERVED_COMMAND_;
+
+	if((command == DALI_GO_TO_SCENE) || 
+	(command == DALI_STORE_THE_DTR_AS_SCENE) || 
+	(command == DALI_REMOVE_FROM_SCENE) ||
+	(command == DALI_ADD_TO_GROUP) ||
+	(command == DALI_REMOVE_FROM_GROUP) ||
+	(command == DALI_QUERY_SCENE_LEVEL))
+		return _ERR_WRONG_COMMAND_;
 	
 	*output = ((0x81 + (address << 1)) << 8) + command;  //Frame: 100AAAA1 CCCCCCCC
 	return _ERR_OK_;
+}
+
+int dali_slave_command_with_param(word *output, byte address, byte command, byte param)
+{
+	if(address > 63)
+		return _ERR_WRONG_ADDRESS_;
+	if(param > 15)
+		return _ERR_WRONG_COMMAND_;	
+
+	if((command == DALI_GO_TO_SCENE) || 
+	(command == DALI_STORE_THE_DTR_AS_SCENE) || 
+	(command == DALI_REMOVE_FROM_SCENE) ||
+	(command == DALI_ADD_TO_GROUP) ||
+	(command == DALI_REMOVE_FROM_GROUP) ||
+	(command == DALI_QUERY_SCENE_LEVEL))
+	{
+		*output = ((0x01 + (address << 1)) << 8) + command + param;  //Frame: 0AAAAAA1 CCCCPPPP
+		return _ERR_OK_;
+	}
+	else
+		return _ERR_WRONG_COMMAND_;
+}
+
+int dali_group_command_with_param(word *output, byte address, byte command, byte param)
+{
+	if(address > 15)
+		return _ERR_WRONG_ADDRESS_;
+	if(param > 15)
+		return _ERR_WRONG_COMMAND_;
+		
+	if((command == DALI_GO_TO_SCENE) || 
+	(command == DALI_STORE_THE_DTR_AS_SCENE) || 
+	(command == DALI_REMOVE_FROM_SCENE) ||
+	(command == DALI_ADD_TO_GROUP) ||
+	(command == DALI_REMOVE_FROM_GROUP) ||
+	(command == DALI_QUERY_SCENE_LEVEL))
+	{
+		*output = ((0x81 + (address << 1)) << 8) + command + param;  //Frame: 100AAAA1 CCCCPPPP
+		return _ERR_OK_;
+	}
+	else
+		return _ERR_WRONG_COMMAND_;
 }
 
 int dali_special_command(word *output, special_command_type command, byte data)
