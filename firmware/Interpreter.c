@@ -144,7 +144,7 @@ int decode_command_to_frame(char* token, word* output)
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n'); i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n')	; i++)
 	{
 		if(i-u >= MAX_COMMAND_LENGTH)
 			return _ERR_PARSE_ERROR_;
@@ -234,13 +234,13 @@ int decode_command_to_frame(char* token, word* output)
 
 	for(i = 0; i < COUNT_COMMANDS; i++)
 	{
-		strcpy(command_list[i].key, groupify);
+		strcpy(groupify, command_list[i].key);
 		strcat(groupify, group_postfix);
 		if(!strcmp(groupify, command))
 		{
 			if(has_param1)
 			{			
-				ret = dali_slave_command(output, (byte)param1, command_list[i].value);
+				ret = dali_group_command(output, (byte)param1, command_list[i].value);
 				if(ret == _ERR_OK_)
 					return command_list[i].mode;
 				else

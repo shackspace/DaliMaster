@@ -84,6 +84,12 @@ TEST(ParserTest, POSITIVE)
     dali_slave_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up_g 1\n", &frame));
+
+    dali_group_command(&frame2, 0x01, DALI_UP_200MS);
+
+    EXPECT_EQ(frame2, frame);
 }
 
 
