@@ -53,7 +53,7 @@ TEST(TestEncoderSpecialCommands,POSITIVE)
 
 TEST(ParseInt, POSITIVE)
 {
-    int i = 0;
+    int16_t i = 0;
 
     EXPECT_EQ(_ERR_OK_, parse_int("-123",&i));
 
@@ -74,7 +74,7 @@ TEST(ParseInt, POSITIVE)
     EXPECT_EQ(_ERR_PARSE_ERROR_, parse_int("1234\n",&i));
 }
 
-TEST(ParserTestValidInputFrame, POSITIVE)
+TEST(ParserTestValidInputString, POSITIVE)
 {
     unsigned short frame;
     unsigned short frame2;
@@ -103,6 +103,33 @@ TEST(ParserTestValidInputFrame, POSITIVE)
 
     EXPECT_EQ(frame2, frame);
 
+    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame("randomize\n", &frame));
+
+    dali_command_randomize(&frame2  );
+
+    EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame("initialize 255\n", &frame));
+
+    dali_command_initialize_broadcast(&frame2);
+
+    EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame("initialize 255 55 55 55 jkhsdfb\n", &frame)); //overlength of frame, but possible
+
+    dali_command_initialize_broadcast(&frame2);
+
+    EXPECT_EQ(frame2, frame);
+}
+
+TEST(ParserTestInvalidInputString, POSITIVE)
+{
+    unsigned short frame;
+    unsigned short frame2;
+
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("up 1000\n", &frame));
+
+    EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame("updown 10 39\n", &frame));
 }
 
 

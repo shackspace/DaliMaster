@@ -1,6 +1,6 @@
 #include "dali_encode.h"
 
-inline int dali_slave_direct_arc(word *output, byte address, byte brightness)
+int dali_slave_direct_arc(word *output, byte address, byte brightness)
 {
 	if(address > 63)
 	{
@@ -13,7 +13,7 @@ inline int dali_slave_direct_arc(word *output, byte address, byte brightness)
 	return _ERR_OK_;
 }
 
-inline int dali_slave_command(word *output, byte address, byte command)
+int dali_slave_command(word *output, byte address, byte command)
 {
 	if(address > 63)
 		return _ERR_WRONG_ADDRESS_;
@@ -32,7 +32,7 @@ inline int dali_slave_command(word *output, byte address, byte command)
 	return _ERR_OK_;
 }
 
-inline int dali_group_direct_arc(word *output, byte address, byte brightness)
+int dali_group_direct_arc(word *output, byte address, byte brightness)
 {
 	if(address > 15)
 	{
@@ -45,7 +45,7 @@ inline int dali_group_direct_arc(word *output, byte address, byte brightness)
 	return _ERR_OK_;
 }
 
-inline int dali_group_command(word *output, byte address, byte command)
+int dali_group_command(word *output, byte address, byte command)
 {
 	if(address > 15)
 		return _ERR_WRONG_ADDRESS_;
@@ -64,7 +64,7 @@ inline int dali_group_command(word *output, byte address, byte command)
 	return _ERR_OK_;
 }
 
-inline int dali_special_command(word *output, special_command_type command, byte data)
+int dali_special_command(word *output, special_command_type command, byte data)
 {	
 	switch(command)
 	{

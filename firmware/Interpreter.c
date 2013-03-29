@@ -1,36 +1,40 @@
 #include "Interpreter.h"
 #include "dali_encode.h"
+#include <ctype.h>
 
 #ifdef TEST
 #define _PROGMEM
+#define strcmp_P strcmp
+#define strcpy_P strcpy
 #else
-#define _PROGMEM __attribute__((__progmem__))
+#include <avr/pgmspace.h> 
+#define _PROGMEM PROGMEM
 #endif
 
 typedef byte bool;
 #define FALSE 0
 #define TRUE !0
 
-const char _PROGMEM identifier_message[] = "DALI Master\r\n";
+const char identifier_message[] _PROGMEM = "DALI Master\r\n";
 
-const char _PROGMEM group_postfix[] = "_g";
+const char group_postfix[] _PROGMEM = "_g";
 
 //special commands
-const char _PROGMEM command_randomize[] = "randomize";
-const char _PROGMEM command_initialize[] = "initialize";
+const char command_randomize[] _PROGMEM = "randomize";
+const char command_initialize[] _PROGMEM = "initialize";
 
 //set level directly
-const char _PROGMEM command_arc[] = "arc";
-const char _PROGMEM command_arc_group[] = "arc_g";
+const char command_arc[] _PROGMEM = "arc";
+const char command_arc_group[] _PROGMEM = "arc_g";
 
 //arc commands
-const char _PROGMEM command_up[] = "up";
-const char _PROGMEM command_down[] = "down";
-const char _PROGMEM command_step_up[] = "step_up";
-const char _PROGMEM command_step_down[] = "step_down";
-const char _PROGMEM command_goto_scene[] = "scene";
-const char _PROGMEM command_max_level[] = "max";
-const char _PROGMEM command_min_level[] = "min";
+const char command_up[] _PROGMEM = "up";
+const char command_down[] _PROGMEM = "down";
+const char command_step_up[] _PROGMEM = "step_up";
+const char command_step_down[] _PROGMEM = "step_down";
+const char command_goto_scene[] _PROGMEM = "scene";
+const char command_max_level[] _PROGMEM = "max";
+const char command_min_level[] _PROGMEM = "min";
 
 typedef struct key_value_mode	
 {
@@ -86,9 +90,9 @@ inline char ascii_to_nibble(char nibble)
 		return -1;
 }
 
-inline int parse_int(char* string, int* integer)
+inline int parse_int(char* string, int16_t* integer)
 {
-	int i = 0;
+	int16_t i = 0;
 	bool sign = FALSE;
 	
 	if(*string == '-')
@@ -202,7 +206,7 @@ int decode_command_to_frame(char* token, word* output)
 		return _ERR_PARSE_ERROR_;
 	}
 
-	if(!strcmp(command_arc_group, command))
+	if(!strcmp_P(command, command_arc_group))
 	{
 		if(has_param1 && has_param2)
 		{
@@ -217,7 +221,7 @@ int decode_command_to_frame(char* token, word* output)
 
 	for(i = 0; i < COUNT_COMMANDS; i++)
 	{
-		if(!strcmp(command_list[i].key, command))
+		if(!strcmp_P(command, command_list[i].key))
 		{
 			if(has_param1)
 			{
@@ -234,7 +238,7 @@ int decode_command_to_frame(char* token, word* output)
 
 	for(i = 0; i < COUNT_COMMANDS; i++)
 	{
-		strcpy(groupify, command_list[i].key);
+		strcpy_P(groupify, command_list[i].key);
 		strcat(groupify, group_postfix);
 		if(!strcmp(groupify, command))
 		{
@@ -252,7 +256,7 @@ int decode_command_to_frame(char* token, word* output)
 
 	for(i = 0; i < COUNT_SPECIAL_COMMANDS; i++)
 	{
-		if(!strcmp(special_command_list[i].key, command))
+		if(!strcmp_P(command, special_command_list[i].key))
 		{
 			ret = dali_special_command(output, special_command_list[i].special, (byte)param1);
 			if(ret == _ERR_OK_)
@@ -265,17 +269,3 @@ int decode_command_to_frame(char* token, word* output)
 		
 	return _ERR_UNIMPLEMENTED_;
 }
-
-/*
-void get_substring(char* src, char *dest, unsigned int begin, unsigned int end)
-{
-    unsigned int i;
-    for(i = 0; (i < (end - begin)) && (i < (strlen(src) - begin)); i++)
-    {
-        dest[i] = src[begin + i];
-    }
-    dest[i] = 0;
-}
-*/
-
-

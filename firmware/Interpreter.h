@@ -5,7 +5,7 @@
 #include "dali_encode.h"
 #include "fifo.h"
 
-
+	
 #ifdef __cplusplus
 extern "C"
 {
@@ -22,10 +22,7 @@ inline char ascii_to_nibble(char nibble);
 
 int decode_command_to_frame(char* token, word* output);
 
-int parse_int(char* string, int* integer);
-
-//void get_substring(char* src, char* dest, unsigned int begin, unsigned int end);
-
+int parse_int(char* string, int16_t* integer);
 
 #ifdef __cplusplus
 }

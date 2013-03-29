@@ -29,15 +29,15 @@ typedef unsigned char  byte;
 
 typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT_ADDRESS, STORE_DTR} special_command_type;
 
-inline int dali_slave_direct_arc(word *output, byte address, byte brightness);
+int dali_slave_direct_arc(word *output, byte address, byte brightness);
 
-inline int dali_slave_command(word *output, byte address, byte command);
+int dali_slave_command(word *output, byte address, byte command);
 
-inline int dali_group_direct_arc(word *output, byte address, byte brightness);
+int dali_group_direct_arc(word *output, byte address, byte brightness);
 
-inline int dali_group_command(word *output, byte address, byte command);
+int dali_group_command(word *output, byte address, byte command);
 
-inline int dali_special_command(word *output, special_command_type command, byte data);
+int dali_special_command(word *output, special_command_type command, byte data);
 
 #ifdef __cplusplus
 }
