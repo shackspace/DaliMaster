@@ -45,7 +45,47 @@ TEST(TestEncoderSpecialCommands,POSITIVE)
 	EXPECT_EQ(_ERR_OK_, dali_special_command(&temp, INITIALIZE, 0));
 	
 	EXPECT_EQ(0xA500, temp);
+
+    EXPECT_EQ(_ERR_OK_, dali_special_command(&temp, PROGRAM_SHORT_ADDRESS, 0x01));
+
+    EXPECT_EQ(0xB703, temp);
 }
+
+TEST(ParseInt, POSITIVE)
+{
+    int i = 0;
+
+    EXPECT_EQ(_ERR_OK_, parse_int("-123",&i));
+
+    EXPECT_EQ(-123,i);
+
+    EXPECT_EQ(_ERR_OK_, parse_int("123",&i));
+
+    EXPECT_EQ(123,i);
+
+    EXPECT_EQ(_ERR_OK_, parse_int("-1234",&i));
+
+    EXPECT_EQ(-1234,i);
+
+    EXPECT_EQ(_ERR_OK_, parse_int("1234",&i));
+
+    EXPECT_EQ(1234,i);
+
+    EXPECT_EQ(_ERR_PARSE_ERROR_, parse_int("1234\n",&i));
+}
+
+TEST(ParserTest, POSITIVE)
+{
+    unsigned short frame;
+    unsigned short frame2;
+
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up 1\n", &frame));
+
+    dali_slave_command(&frame2, 0x01, DALI_UP_200MS);
+
+    EXPECT_EQ(frame2, frame);
+}
+
 
 int main(int argv, char** argc)
 {

@@ -4,33 +4,33 @@
 #ifdef TEST
 #define _PROGMEM
 #else
-#define _PROGMEM const __attribute__((__progmem__))
+#define _PROGMEM __attribute__((__progmem__))
 #endif
 
 typedef byte bool;
 #define FALSE 0
 #define TRUE !0
 
-char _PROGMEM identifier_message[] = "DALI Master\r\n";
+const char _PROGMEM identifier_message[] = "DALI Master\r\n";
 
-char _PROGMEM group_postfix[] = "_g";
+const char _PROGMEM group_postfix[] = "_g";
 
 //special commands
-char _PROGMEM command_randomize[] = "randomize";
-char _PROGMEM command_initialize[] = "initialize";
+const char _PROGMEM command_randomize[] = "randomize";
+const char _PROGMEM command_initialize[] = "initialize";
 
 //set level directly
-char _PROGMEM command_arc[] = "arc";
-char _PROGMEM command_arc_group[] = "arc_g";
+const char _PROGMEM command_arc[] = "arc";
+const char _PROGMEM command_arc_group[] = "arc_g";
 
 //arc commands
-char _PROGMEM command_up[] = "up";
-char _PROGMEM command_down[] = "down";
-char _PROGMEM command_step_up[] = "step_up";
-char _PROGMEM command_step_down[] = "step_down";
-char _PROGMEM command_goto_scene[] = "scene";
-char _PROGMEM command_max_level[] = "max";
-char _PROGMEM command_min_level[] = "min";
+const char _PROGMEM command_up[] = "up";
+const char _PROGMEM command_down[] = "down";
+const char _PROGMEM command_step_up[] = "step_up";
+const char _PROGMEM command_step_down[] = "step_down";
+const char _PROGMEM command_goto_scene[] = "scene";
+const char _PROGMEM command_max_level[] = "max";
+const char _PROGMEM command_min_level[] = "min";
 
 typedef struct key_value_mode	
 {
@@ -95,27 +95,33 @@ inline int parse_int(char* string, int* integer)
 	{	
 		sign = TRUE;
 		string++;
-	}
+	}	
 
-	if(isdigit(*string) && (*string != 0))
-	{
-		i *= 10;
-		i += atoi(*string);
+	while(*string != 0)
+	{			
+		if(isdigit(*string) && (*string != 0))
+		{
+			i *= 10;
+			i += *string - '0';
+			string++;
+		}
+		else
+		{
+			return _ERR_PARSE_ERROR_;
+		}
 	}
-	else if(sign && (*string == 0))
+	
+	if(sign)
 	{
-		integer = -i;
-		return _ERR_OK_;
-	}
-	else if(*string == 0)
-	{
-		integer = i;
-		return _ERR_OK_;
+		*integer = -i;
 	}
 	else
 	{
-		return _ERR_PARSE_ERROR_;
+		*integer = i;
 	}
+		
+	
+	return _ERR_OK_;
 }
 
 int decode_command_to_frame(char* token, word* output)
@@ -138,9 +144,9 @@ int decode_command_to_frame(char* token, word* output)
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') ; i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n'); i++)
 	{
-		if(i-u < MAX_COMMAND_LENGTH)
+		if(i-u >= MAX_COMMAND_LENGTH)
 			return _ERR_PARSE_ERROR_;
 		command[i-u] = token[i];
 	}
@@ -149,10 +155,10 @@ int decode_command_to_frame(char* token, word* output)
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') ; i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n'); i++)
 	{
 		has_param1 = TRUE;
-		if(i-u < MAX_COMMAND_LENGTH)
+		if(i-u >= MAX_COMMAND_LENGTH)
 			return _ERR_PARSE_ERROR_;
 		param1_string[i-u] = token[i];
 	}
@@ -161,10 +167,10 @@ int decode_command_to_frame(char* token, word* output)
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') ; i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n'); i++)
 	{
 		has_param2 = TRUE;
-		if(i-u < MAX_COMMAND_LENGTH)
+		if(i-u >= MAX_COMMAND_LENGTH)
 			return _ERR_PARSE_ERROR_;
 		param1_string[2-u] = token[i];
 	}
@@ -173,10 +179,14 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(_ERR_OK_ != parse_int(param1_string, &param1))
 			return _ERR_PARSE_ERROR_;
+		if(param1 > 255 || param1 < 0)
+			return _ERR_PARSE_ERROR_;
 	}
 	if(has_param2)
 	{
 		if(_ERR_OK_ !=  parse_int(param2_string, &param2))
+			return _ERR_PARSE_ERROR_;
+		if(param1 > 255 || param1 < 0)
 			return _ERR_PARSE_ERROR_;
 	}
 	
@@ -184,7 +194,7 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(has_param1 && has_param2)
 		{
-			ret = dali_slave_direct_arc(output, param1, param2);
+			ret = dali_slave_direct_arc(output, (byte)param1, (byte)param2);
 			if(ret == _ERR_OK_)
 				return _MODE_SIMPLE_;
 			else return ret;
@@ -196,7 +206,7 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(has_param1 && has_param2)
 		{
-			ret = dali_group_direct_arc(output, param1, param2);
+			ret = dali_group_direct_arc(output, (byte)param1, (byte)param2);
 			if(ret == _ERR_OK_)
 				return _MODE_SIMPLE_;
 			else return ret;
@@ -209,11 +219,15 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(!strcmp(command_list[i].key, command))
 		{
-			ret = dali_slave_command(output, param1, command_list[i].value);
-			if(ret == _ERR_OK_)
-				return command_list[i].mode;
-			else
-				return ret;
+			if(has_param1)
+			{
+				ret = dali_slave_command(output, (byte)param1, command_list[i].value);
+				if(ret == _ERR_OK_)
+					return command_list[i].mode;
+				else
+					return ret;
+			}
+			return _ERR_PARSE_ERROR_;
 		}
 	}
 
@@ -224,11 +238,15 @@ int decode_command_to_frame(char* token, word* output)
 		strcat(groupify, group_postfix);
 		if(!strcmp(groupify, command))
 		{
-			ret = dali_slave_command(output, param1, command_list[i].value);
-			if(ret == _ERR_OK_)
-				return command_list[i].mode;
-			else
-				return ret;
+			if(has_param1)
+			{			
+				ret = dali_slave_command(output, (byte)param1, command_list[i].value);
+				if(ret == _ERR_OK_)
+					return command_list[i].mode;
+				else
+					return ret;
+			}
+			return _ERR_PARSE_ERROR_;
 		}
 	}
 
@@ -236,7 +254,7 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(!strcmp(special_command_list[i].key, command))
 		{
-			ret = dali_special_command(output, special_command_list[i].special, param1);
+			ret = dali_special_command(output, special_command_list[i].special, (byte)param1);
 			if(ret == _ERR_OK_)
 				return special_command_list[i].mode;
 			else
@@ -248,6 +266,7 @@ int decode_command_to_frame(char* token, word* output)
 	return _ERR_UNIMPLEMENTED_;
 }
 
+/*
 void get_substring(char* src, char *dest, unsigned int begin, unsigned int end)
 {
     unsigned int i;
@@ -257,5 +276,6 @@ void get_substring(char* src, char *dest, unsigned int begin, unsigned int end)
     }
     dest[i] = 0;
 }
+*/
 
 
