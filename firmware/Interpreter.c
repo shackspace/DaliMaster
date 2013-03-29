@@ -172,7 +172,7 @@ int decode_command_to_frame(char* token, word* output)
 		has_param2 = TRUE;
 		if(i-u >= MAX_COMMAND_LENGTH)
 			return _ERR_PARSE_ERROR_;
-		param1_string[2-u] = token[i];
+		param2_string[i-u] = token[i];
 	}
 
 	if(has_param1)
@@ -186,7 +186,7 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(_ERR_OK_ !=  parse_int(param2_string, &param2))
 			return _ERR_PARSE_ERROR_;
-		if(param1 > 255 || param1 < 0)
+		if(param2 > 255 || param2 < 0)
 			return _ERR_PARSE_ERROR_;
 	}
 	

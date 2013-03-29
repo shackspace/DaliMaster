@@ -74,7 +74,7 @@ TEST(ParseInt, POSITIVE)
     EXPECT_EQ(_ERR_PARSE_ERROR_, parse_int("1234\n",&i));
 }
 
-TEST(ParserTest, POSITIVE)
+TEST(ParserTestValidInputFrame, POSITIVE)
 {
     unsigned short frame;
     unsigned short frame2;
@@ -90,6 +90,19 @@ TEST(ParserTest, POSITIVE)
     dali_group_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("arc 1 8\n", &frame));
+
+    dali_slave_direct_arc(&frame2, 0x01, 0x08);
+
+    EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("arc_g 1 8\n", &frame));
+
+    dali_group_direct_arc(&frame2, 0x01, 0x08);
+
+    EXPECT_EQ(frame2, frame);
+
 }
 
 
