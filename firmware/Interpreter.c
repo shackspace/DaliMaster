@@ -25,6 +25,18 @@ const char group_postfix[] _PROGMEM = "_g";
 //special commands
 const char command_randomize[] _PROGMEM = "randomize";
 const char command_initialize[] _PROGMEM = "initialize";
+const char command_dtr[] _PROGMEM = "dtr";
+const char command_terminate[] _PROGMEM = "terminate";
+const char command_compare[] _PROGMEM = "compare";
+const char command_withdraw[] _PROGMEM = "withdraw";
+const char command_search_addrh[] _PROGMEM = "search_address_h";
+const char command_search_addrm[] _PROGMEM = "search_address_m";
+const char command_search_addrl[] _PROGMEM = "search_address_l";
+const char command_programm_short_address[] _PROGMEM = "programm_short_address";
+const char command_verify_short_address[] _PROGMEM = "verify_short_address";
+const char command_query_short_address[] _PROGMEM = "query_short_address";
+const char command_physical_selection[] _PROGMEM = "physical_selection";
+const char command_enable_device_type[] _PROGMEM = "enable_device_type";
 
 //set level directly
 const char command_arc[] _PROGMEM = "arc";
@@ -70,6 +82,11 @@ const char command_query_min_level[] _PROGMEM = "query_min_level";
 const char command_query_power_on_level[] _PROGMEM = "query_power_on_level";
 const char command_query_system_failure_level[] _PROGMEM = "query_system_failure_level";
 const char command_query_fade_time[] _PROGMEM = "query_fade_time";
+const char command_query_groups_0_7[] _PROGMEM = "query_groups_0_7";
+const char command_query_groups_8_15[] _PROGMEM = "query_groups_8_15";
+const char command_query_random_address_h[] _PROGMEM = "query_random_address_h";
+const char command_query_random_address_m[] _PROGMEM = "query_random_address_m";
+const char command_query_random_address_l[] _PROGMEM = "query_random_address_l";
 
 
 //commands with param
@@ -79,6 +96,7 @@ const char command_add_to_group[] _PROGMEM = "add_group";
 const char command_remove_from_group[] _PROGMEM = "remove_group";
 
 //query with param
+const char command_query_scene_level[] _PROGMEM = "query_scene_level";
 
 typedef struct key_value_mode	
 {
