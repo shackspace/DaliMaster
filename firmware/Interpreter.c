@@ -60,7 +60,6 @@ const char command_store_dtr_system_failure[] _PROGMEM = "store_dtr_system_failu
 const char command_store_dtr_power_on[] _PROGMEM = "store_dtr_power_on";
 const char command_store_dtr_fade_time[] _PROGMEM = "store_dtr_fade_time";
 const char command_store_dtr_fade_rate[] _PROGMEM = "store_dtr_fade_rate";
-const char command_store_dtr_scene[] _PROGMEM = "store_dtr_scene";
 const char command_store_dtr_short_address[] _PROGMEM = "store_dtr_short_address";
 
 //query
@@ -94,6 +93,7 @@ const char command_goto_scene[] _PROGMEM = "scene";
 const char command_remove_from_scene[] _PROGMEM = "remove_scene";
 const char command_add_to_group[] _PROGMEM = "add_group";
 const char command_remove_from_group[] _PROGMEM = "remove_group";
+const char command_store_dtr_scene[] _PROGMEM = "store_dtr_scene";
 
 //query with param
 const char command_query_scene_level[] _PROGMEM = "query_scene_level";
@@ -121,20 +121,73 @@ const key_value_mode command_list[] = {
 	{command_step_up, DALI_STEP_UP, _MODE_SIMPLE_}, 
 	{command_step_down, DALI_STEP_DOWN, _MODE_SIMPLE_},
 	{command_max_level, DALI_RECALL_MAX_LEVEL, _MODE_SIMPLE_}, 
-	{command_min_level, DALI_RECALL_MIN_LEVEL, _MODE_SIMPLE_}
+	{command_min_level, DALI_RECALL_MIN_LEVEL, _MODE_SIMPLE_},
+	{command_step_off, DALI_STEP_DOWN_AND_OFF, _MODE_SIMPLE_},
+	{command_step_on, DALI_ON_AND_STEP_UP, _MODE_SIMPLE_},
+	{command_reset, DALI_RESET, _MODE_SIMPLE_},
+	//dtr commands	
+	{command_store_level_dtr, DALI_STORE_ACTUAL_DIM_LEVEL_IN_DTR, _MODE_SIMPLE_},
+	{command_store_dtr_max, DALI_STORE_THE_DTR_AS_MAX_LEVEL, _MODE_SIMPLE_},
+	{command_store_dtr_min, DALI_STORE_THE_DTR_AS_MIN_LEVEL, _MODE_SIMPLE_},
+	{command_store_dtr_system_failure, DALI_STORE_THE_DTR_AS_SYSTEM_FAILURE_LEVEL, _MODE_SIMPLE_},
+	{command_store_dtr_power_on, DALI_STORE_THE_DTR_AS_POWER_ON_LEVEL, _MODE_SIMPLE_},
+	{command_store_dtr_fade_time, DALI_STORE_THE_DTR_AS_FADE_TIME, _MODE_SIMPLE_},
+	{command_store_dtr_fade_rate, DALI_STORE_THE_DTR_AS_FADE_RATE, _MODE_SIMPLE_}, 
+	{command_store_dtr_short_address, DALI_STORE_DTR_AS_SHORT_ADDRESS, _MODE_SIMPLE_},
+	//query
+	{command_query_status, DALI_QUERY_STATUS, _MODE_QUERY_},
+	{command_query_ballast, DALI_QUERY_BALLAST, _MODE_QUERY_},
+	{command_query_lamp_failure, DALI_QUERY_LAMP_FAILURE, _MODE_QUERY_},
+ 	{command_query_lamp_power_on, DALI_QUERY_LAMP_POWER_ON, _MODE_QUERY_},
+	{command_query_limit_error, DALI_QUERY_LIMIT_ERROR, _MODE_QUERY_},
+	{command_query_reset_state, DALI_QUERY_RESET_STATE, _MODE_QUERY_},
+	{command_query_missing_short_address, DALI_QUERY_MISSING_SHORT_ADDRESS, _MODE_QUERY_},
+	{command_query_version_number, DALI_QUERY_VERSION_NUMBER, _MODE_QUERY_},
+	{command_query_content_dtr, DALI_QUERY_CONTENT_DTR, _MODE_QUERY_},
+	{command_query_device_type, DALI_QUERY_DEVICE_TYPE, _MODE_QUERY_},
+	{command_query_physical_minimum_level, DALI_QUERY_PHYSICAL_MINIMUM_LEVEL, _MODE_QUERY_},
+	{command_query_power_failure, DALI_QUERY_POWER_FAILURE, _MODE_QUERY_},
+	{command_query_actual_level, DALI_QUERY_ACTUAL_LEVEL, _MODE_QUERY_},
+	{command_query_max_level, DALI_QUERY_MAX_LEVEL, _MODE_QUERY_},
+	{command_query_min_level, DALI_QUERY_MIN_LEVEL, _MODE_QUERY_},
+	{command_query_power_on_level, DALI_QUERY_POWER_ON_LEVEL, _MODE_QUERY_},
+	{command_query_system_failure_level, DALI_QUERY_SYSTEM_FAILURE_LEVEL, _MODE_QUERY_},
+	{command_query_fade_time, DALI_QUERY_FADE, _MODE_QUERY_},
+	{command_query_groups_0_7, DALI_QUERY_GROUPS_0_7, _MODE_QUERY_},
+	{command_query_groups_8_15, DALI_QUERY_GROUPS_8_15, _MODE_QUERY_},
+	{command_query_random_address_h, DALI_QUERY_RANDOM_ADDRESS_H, _MODE_QUERY_},
+	{command_query_random_address_m, DALI_QUERY_RANDOM_ADDRESS_M, _MODE_QUERY_},
+	{command_query_random_address_l, DALI_QUERY_RANDOM_ADDRESS_L, _MODE_QUERY_},
 	};
 
 #define COUNT_COMMANDS_WITH_PARAM 1
 
 const key_value_mode command_with_param_list[] = {
 	{command_goto_scene, DALI_GO_TO_SCENE, _MODE_SIMPLE_}, 
+	{command_remove_from_scene, DALI_REMOVE_FROM_SCENE, _MODE_SIMPLE_},
+	{command_add_to_group, DALI_ADD_TO_GROUP, _MODE_SIMPLE_},
+	{command_remove_from_group, DALI_REMOVE_FROM_GROUP, _MODE_SIMPLE_},
+	{command_store_dtr_scene, DALI_STORE_THE_DTR_AS_SCENE, _MODE_SIMPLE_},
+	{command_query_scene_level, DALI_QUERY_SCENE_LEVEL, _MODE_QUERY_}
 	};
 
 #define COUNT_SPECIAL_COMMANDS 2
 
 const key_special_mode special_command_list[] = {
-		{command_initialize, INITIALIZE, _MODE_REPEAT_TWICE_}, 
-	{command_randomize, RANDOMIZE, _MODE_REPEAT_TWICE_}
+	{command_initialize, INITIALIZE, _MODE_REPEAT_TWICE_}, 
+	{command_randomize, RANDOMIZE, _MODE_REPEAT_TWICE_},	
+	{command_dtr, STORE_DTR, _MODE_SIMPLE_},
+	{command_terminate, TERMINATE, _MODE_SIMPLE_},
+	{command_compare, COMPARE, _MODE_QUERY_},
+	{command_withdraw, WITHDRAW, _MODE_SIMPLE_},
+	{command_search_addrh, SEARCH_ADDRESS_H, _MODE_SIMPLE_},
+	{command_search_addrm, SEARCH_ADDRESS_M, _MODE_SIMPLE_},
+	{command_search_addrl, SEARCH_ADDRESS_L, _MODE_SIMPLE_},
+	{command_programm_short_address, PROGRAM_SHORT_ADDRESS, _MODE_SIMPLE_},
+	{command_verify_short_address, VERIFY_SHORT_ADDRESS, _MODE_QUERY_},
+	{command_query_short_address, QUERY_SHORT_ADDRESS, _MODE_QUERY_},
+	{command_physical_selection, PHYSICAL_SELECTION, _MODE_SIMPLE_},
+	{command_enable_device_type, ENABLE_DEVICE_TYPE, _MODE_SIMPLE_}
 	};
 
 

@@ -141,16 +141,36 @@ int dali_special_command(word *output, special_command_type command, byte data)
 	case PROGRAM_SHORT_ADDRESS:
 		*output = (DALI_PROGRAM_SHORT_ADDRESS << 8) + 0x01 + ((0x3F & data) << 1); //1011 0111 0xxx xxx1 
 		break;
+	case VERIFY_SHORT_ADDRESS:
+		*output = (DALI_VERIFY_SHORT_ADDRESS << 8) + 0x01 + ((0x3F & data) << 1);
+		break;
+	case QUERY_SHORT_ADDRESS:
+		*output = DALI_QUERY_SHORT_ADDRESS << 8;
+		break;
 	case COMPARE:
 		*output = DALI_COMPARE << 8;
 		break;
 	case WITHDRAW:
 		*output = DALI_WITHDRAW << 8;
 		break;
+	case SEARCH_ADDRESS_H:
+		*output = (DALI_SEARCHADDRH << 8) + data;
+		break;
+	case SEARCH_ADDRESS_M:
+		*output = (DALI_SEARCHADDRM << 8) + data;
+		break;
+	case SEARCH_ADDRESS_L:
+		*output = (DALI_SEARCHADDRL << 8) + data;
+		break;
+	case PHYSICAL_SELECTION:
+		*output = (DALI_PHYSICAL_SELECTION << 8);
+		break;
+	case ENABLE_DEVICE_TYPE:
+		*output = (DALI_ENABLE_DEVICE_TYPE_X << 8) + data;
+		break;
 	default:
 		return _ERR_WRONG_COMMAND_;
 		break;
-
 	}	
 	return _ERR_OK_;
 }
