@@ -112,7 +112,7 @@ typedef struct key_special_mode
 	byte mode;
 } key_special_mode;
 
-#define COUNT_COMMANDS 7
+#define COUNT_COMMANDS 41
 
 const key_value_mode command_list[] = {
 	{command_off, DALI_IMMEDIATE_OFF, _MODE_SIMPLE_}, 
@@ -160,7 +160,7 @@ const key_value_mode command_list[] = {
 	{command_query_random_address_l, DALI_QUERY_RANDOM_ADDRESS_L, _MODE_QUERY_},
 	};
 
-#define COUNT_COMMANDS_WITH_PARAM 1
+#define COUNT_COMMANDS_WITH_PARAM 6
 
 const key_value_mode command_with_param_list[] = {
 	{command_goto_scene, DALI_GO_TO_SCENE, _MODE_SIMPLE_}, 
@@ -171,7 +171,7 @@ const key_value_mode command_with_param_list[] = {
 	{command_query_scene_level, DALI_QUERY_SCENE_LEVEL, _MODE_QUERY_}
 	};
 
-#define COUNT_SPECIAL_COMMANDS 2
+#define COUNT_SPECIAL_COMMANDS 14
 
 const key_special_mode special_command_list[] = {
 	{command_initialize, INITIALIZE, _MODE_REPEAT_TWICE_}, 
@@ -189,10 +189,6 @@ const key_special_mode special_command_list[] = {
 	{command_physical_selection, PHYSICAL_SELECTION, _MODE_SIMPLE_},
 	{command_enable_device_type, ENABLE_DEVICE_TYPE, _MODE_SIMPLE_}
 	};
-
-
-
- 
 
 inline char nibble_to_ascii(uint8_t nibble)
 {		
