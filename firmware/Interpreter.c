@@ -166,7 +166,7 @@ const key_value_mode command_with_param_list[] = {
 	{command_goto_scene, DALI_GO_TO_SCENE, _MODE_SIMPLE_}, 
     {command_remove_from_scene, DALI_REMOVE_FROM_SCENE, _MODE_REPEAT_TWICE_},
     {command_add_to_group, DALI_ADD_TO_GROUP, _MODE_REPEAT_TWICE_},
-	{command_remove_from_group, DALI_REMOVE_FROM_GROUP, _MODE_SIMPLE_},
+    {command_remove_from_group, DALI_REMOVE_FROM_GROUP, _MODE_REPEAT_TWICE_},
     {command_store_dtr_scene, DALI_STORE_THE_DTR_AS_SCENE, _MODE_REPEAT_TWICE_},
     {command_query_scene_level, DALI_QUERY_SCENE_LEVEL, _MODE_QUERY_}
 	};
