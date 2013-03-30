@@ -135,6 +135,12 @@ TEST(ParserTestValidInputString, POSITIVE)
     dali_command_initialize_broadcast(&frame2);
 
     EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("terminate", &frame));
+
+    dali_command_terminate(&frame2);
+
+    EXPECT_EQ(frame2,frame);
 }
 
 TEST(ParserTestInvalidInputString, POSITIVE)

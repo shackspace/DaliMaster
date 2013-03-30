@@ -24,7 +24,7 @@ typedef unsigned char  byte;
 
 #define dali_command_initialize_broadcast(output) dali_special_command(output, INITIALIZE, 0xFF)
 #define dali_command_randomize(output) dali_special_command(output, RANDOMIZE, 0)
-#define dali_command_terminate(output) dali_special_command(output, RANDOMIZE, 0)
+#define dali_command_terminate(output) dali_special_command(output, TERMINATE, 0)
 #define dali_command_off(output,address) dali_slave_command(output,address,0x00) 
 
 typedef enum {RANDOMIZE, INITIALIZE, TERMINATE, COMPARE, WITHDRAW, PROGRAM_SHORT_ADDRESS, VERIFY_SHORT_ADDRESS, QUERY_SHORT_ADDRESS, STORE_DTR, SEARCH_ADDRESS_H, SEARCH_ADDRESS_M, SEARCH_ADDRESS_L, PHYSICAL_SELECTION, ENABLE_DEVICE_TYPE} special_command_type;

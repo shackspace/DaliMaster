@@ -35,22 +35,30 @@ int main()
 			{
 				if(_MODE_SIMPLE_ == ret)
 				{ 
-					dali_send(frame);
-					suart_putstring("ACK\n");
+					if(_ERR_OK_ == dali_send(frame))
+						suart_putstring("ACK\n");
+					else
+						suart_putstring("ERROR\n");
 				}
 				else if(_MODE_REPEAT_TWICE_ == ret)
 				{
-					dali_send_with_repeat(frame);
-					suart_putstring("ACK\n");
+					if(_ERR_OK_ == dali_send_with_repeat(frame))
+						suart_putstring("ACK\n");
+					else
+						suart_putstring("ERROR\n");
 				}
 				else if(_MODE_QUERY_ == ret)
 				{
 					byte ans;
-					dali_query(frame, &ans);
-					suart_putstring("ANS ");
-					suart_putc(nibble_to_ascii(ans >> 4));
-					suart_putc(nibble_to_ascii(ans & 0x0F));
-					suart_putc('\n');
+					if(_ERR_OK_ == dali_query(frame, &ans))
+					{
+						suart_putstring("ANS ");
+						suart_putc(nibble_to_ascii(ans >> 4));
+						suart_putc(nibble_to_ascii(ans & 0x0F));
+						suart_putc('\n');
+					}
+					else
+						suart_putstring("ERROR\n");
 				}
 			}
 			else

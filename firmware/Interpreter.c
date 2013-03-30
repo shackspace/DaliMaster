@@ -124,16 +124,16 @@ const key_value_mode command_list[] = {
 	{command_min_level, DALI_RECALL_MIN_LEVEL, _MODE_SIMPLE_},
 	{command_step_off, DALI_STEP_DOWN_AND_OFF, _MODE_SIMPLE_},
 	{command_step_on, DALI_ON_AND_STEP_UP, _MODE_SIMPLE_},
-	{command_reset, DALI_RESET, _MODE_SIMPLE_},
+    {command_reset, DALI_RESET, _MODE_REPEAT_TWICE_},
 	//dtr commands	
-	{command_store_level_dtr, DALI_STORE_ACTUAL_DIM_LEVEL_IN_DTR, _MODE_SIMPLE_},
-	{command_store_dtr_max, DALI_STORE_THE_DTR_AS_MAX_LEVEL, _MODE_SIMPLE_},
-	{command_store_dtr_min, DALI_STORE_THE_DTR_AS_MIN_LEVEL, _MODE_SIMPLE_},
-	{command_store_dtr_system_failure, DALI_STORE_THE_DTR_AS_SYSTEM_FAILURE_LEVEL, _MODE_SIMPLE_},
-	{command_store_dtr_power_on, DALI_STORE_THE_DTR_AS_POWER_ON_LEVEL, _MODE_SIMPLE_},
-	{command_store_dtr_fade_time, DALI_STORE_THE_DTR_AS_FADE_TIME, _MODE_SIMPLE_},
-	{command_store_dtr_fade_rate, DALI_STORE_THE_DTR_AS_FADE_RATE, _MODE_SIMPLE_}, 
-	{command_store_dtr_short_address, DALI_STORE_DTR_AS_SHORT_ADDRESS, _MODE_SIMPLE_},
+    {command_store_level_dtr, DALI_STORE_ACTUAL_DIM_LEVEL_IN_DTR, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_max, DALI_STORE_THE_DTR_AS_MAX_LEVEL, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_min, DALI_STORE_THE_DTR_AS_MIN_LEVEL, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_system_failure, DALI_STORE_THE_DTR_AS_SYSTEM_FAILURE_LEVEL, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_power_on, DALI_STORE_THE_DTR_AS_POWER_ON_LEVEL, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_fade_time, DALI_STORE_THE_DTR_AS_FADE_TIME, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_fade_rate, DALI_STORE_THE_DTR_AS_FADE_RATE, _MODE_REPEAT_TWICE_},
+    {command_store_dtr_short_address, DALI_STORE_DTR_AS_SHORT_ADDRESS, _MODE_REPEAT_TWICE_},
 	//query
 	{command_query_status, DALI_QUERY_STATUS, _MODE_QUERY_},
 	{command_query_ballast, DALI_QUERY_BALLAST, _MODE_QUERY_},
@@ -164,11 +164,11 @@ const key_value_mode command_list[] = {
 
 const key_value_mode command_with_param_list[] = {
 	{command_goto_scene, DALI_GO_TO_SCENE, _MODE_SIMPLE_}, 
-	{command_remove_from_scene, DALI_REMOVE_FROM_SCENE, _MODE_SIMPLE_},
-	{command_add_to_group, DALI_ADD_TO_GROUP, _MODE_SIMPLE_},
+    {command_remove_from_scene, DALI_REMOVE_FROM_SCENE, _MODE_REPEAT_TWICE_},
+    {command_add_to_group, DALI_ADD_TO_GROUP, _MODE_REPEAT_TWICE_},
 	{command_remove_from_group, DALI_REMOVE_FROM_GROUP, _MODE_SIMPLE_},
-	{command_store_dtr_scene, DALI_STORE_THE_DTR_AS_SCENE, _MODE_SIMPLE_},
-	{command_query_scene_level, DALI_QUERY_SCENE_LEVEL, _MODE_QUERY_}
+    {command_store_dtr_scene, DALI_STORE_THE_DTR_AS_SCENE, _MODE_REPEAT_TWICE_},
+    {command_query_scene_level, DALI_QUERY_SCENE_LEVEL, _MODE_QUERY_}
 	};
 
 #define COUNT_SPECIAL_COMMANDS 14

@@ -16,7 +16,7 @@ int dali_send(word frame)
 int dali_send_with_repeat(word frame)
 {
 	euart_put(frame);
-	_delay_ms(100);
+    _delay_ms(40);
 	euart_put(frame);
 	return _ERR_OK_;
 }
