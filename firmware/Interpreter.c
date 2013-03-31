@@ -322,7 +322,7 @@ int decode_command_to_frame(char* token, word* output)
 				return _MODE_SIMPLE_;
 			else return ret;
 		}
-		return _ERR_PARSE_ERROR_;
+		return _ERR_PARAMETER_MISSING_;
 	}
 
 	if(!strcmp_P(command, command_arc_group))
@@ -334,7 +334,7 @@ int decode_command_to_frame(char* token, word* output)
 				return _MODE_SIMPLE_;
 			else return ret;
 		}
-		return _ERR_PARSE_ERROR_;
+		return _ERR_PARAMETER_MISSING_;
 	}
 
 
@@ -350,7 +350,7 @@ int decode_command_to_frame(char* token, word* output)
 				else
 					return ret;
 			}
-			return _ERR_PARSE_ERROR_;
+			return _ERR_PARAMETER_MISSING_;
 		}
 	}
 
@@ -369,7 +369,7 @@ int decode_command_to_frame(char* token, word* output)
 				else
 					return ret;
 			}
-			return _ERR_PARSE_ERROR_;
+			return _ERR_PARAMETER_MISSING_;
 		}
 	}
 
@@ -377,7 +377,7 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(!strcmp_P(command, command_with_param_list[i].key))
 		{
-			if(has_param1)
+			if(has_param1 && has_param2)
 			{
 				ret = dali_slave_command(output, (byte)param1, command_with_param_list[i].value);
 				if(ret == _ERR_OK_)
@@ -385,7 +385,7 @@ int decode_command_to_frame(char* token, word* output)
 				else
 					return ret;
 			}
-			return _ERR_PARSE_ERROR_;
+			return _ERR_PARAMETER_MISSING_;
 		}
 	}
 
@@ -396,7 +396,7 @@ int decode_command_to_frame(char* token, word* output)
 		strcat(groupify, group_postfix);
 		if(!strcmp(groupify, command))
 		{
-			if(has_param1)
+			if(has_param1 && has_param2)
 			{			
 				ret = dali_group_command(output, (byte)param1, command_with_param_list[i].value);
 				if(ret == _ERR_OK_)
@@ -404,7 +404,7 @@ int decode_command_to_frame(char* token, word* output)
 				else
 					return ret;
 			}
-			return _ERR_PARSE_ERROR_;
+			return _ERR_PARAMETER_MISSING_;
 		}
 	}
 

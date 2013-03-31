@@ -14,6 +14,7 @@ extern "C"
 #define MAX_BUFFER_LENGTH 256
 #define _ERR_PARSE_ERROR_ -253
 #define _ERR_BUFFER_FULL_ -254
+#define _ERR_PARAMETER_MISSING_ -255
 #define _ERR_UNIMPLEMENTED_ -256
 
 inline char nibble_to_ascii(uint8_t nibble);
