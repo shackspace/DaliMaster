@@ -1,5 +1,6 @@
 #include "Interpreter.h"
 #include "dali_encode.h"
+#include "dali.h"
 #include <ctype.h>
 
 #ifdef TEST
@@ -260,6 +261,9 @@ int decode_command_to_frame(char* token, word* output)
 	uint16_t i;
 	uint16_t u;
 	int ret;
+
+	*output = INVALID_FRAME;
+
 	const uint16_t length = strlen(token);
 	if(length == 0)
 		return _ERR_PARSE_ERROR_;

@@ -5,6 +5,9 @@
 #include "dali_encode.h"
 
 #define _ERR_NO_ANSWER_ -100
+#define _ERR_INVALID_FRAME_ -101
+
+#define INVALID_FRAME 0x8080
 
 #ifdef __cplusplus
 extern "C"

@@ -150,11 +150,17 @@ TEST(ParserTestInvalidInputString, POSITIVE)
 
     EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("up 1000\n", &frame));
 
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("up up 10\n", &frame));
+
     EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame("updown 10 39\n", &frame));
 
     EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame("up10 39\n", &frame));
 
     EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame("scene 7\n", &frame));
+
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("scenescenescenescenescenescenescenescenescenescenescenescenescenescene 7\n", &frame));
+
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("", &frame));
 }
 
 

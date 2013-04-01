@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include <avr/wdt.h>
 
 #include "suart.h"
 
@@ -9,9 +10,9 @@
 #define nop() __asm volatile ("nop")
 
 #ifdef SUART_TXD
-    #define SUART_TXD_PORT PORTB
-    #define SUART_TXD_DDR  DDRB
-    #define SUART_TXD_BIT  PB1
+    #define SUART_TXD_PORT PORTD
+    #define SUART_TXD_DDR  DDRD
+    #define SUART_TXD_BIT  PD2
     static volatile uint16_t outframe;
 #endif // SUART_TXD 
 
@@ -19,12 +20,12 @@
     #define SUART_RXD_PORT PORTB
     #define SUART_RXD_PIN  PINB
     #define SUART_RXD_DDR  DDRB
-    #define SUART_RXD_BIT  PB0
+    #define SUART_RXD_BIT  PB6
     static volatile uint16_t inframe;
     static volatile uint8_t inbits, received;
 
     #ifdef _FIFO_H_
-        #define INBUF_SIZE 4
+        #define INBUF_SIZE 16
         static uint8_t inbuf[INBUF_SIZE];
         fifo_t infifo;
     #else // _FIFO_H_ 
@@ -188,9 +189,10 @@ int suart_getc_nowait()
 
 int suart_getc_wait()
 {
-    while (!received)   {}
+    while (!received)   {wdt_reset();}
     received = 0;
-   
+    wdt_reset();   
+
     return (int) indata;
 }
 

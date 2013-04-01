@@ -9,14 +9,18 @@ void dali_init()
 
 int dali_send(word frame)
 {
+	if(frame == INVALID_FRAME)
+		return _ERR_INVALID_FRAME_;	
 	euart_put(frame);
 	return _ERR_OK_;
 }
 
 int dali_send_with_repeat(word frame)
 {
+	if(frame == INVALID_FRAME)
+		return _ERR_INVALID_FRAME_;	
 	euart_put(frame);
-    _delay_ms(40);
+    	_delay_ms(40);
 	euart_put(frame);
 	return _ERR_OK_;
 }
@@ -25,6 +29,8 @@ int dali_send_with_repeat(word frame)
 int dali_query(word frame, byte* result)
 {
 	int i;
+	if(frame == INVALID_FRAME)
+		return _ERR_INVALID_FRAME_;	
 	euart_put(frame);
 	_delay_ms(20);
 	for(i = 0; i < 50; i++)
