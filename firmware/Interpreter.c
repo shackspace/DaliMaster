@@ -125,16 +125,16 @@ const key_value_mode command_list[] = {
 	{command_min_level, DALI_RECALL_MIN_LEVEL, _MODE_SIMPLE_},
 	{command_step_off, DALI_STEP_DOWN_AND_OFF, _MODE_SIMPLE_},
 	{command_step_on, DALI_ON_AND_STEP_UP, _MODE_SIMPLE_},
-    {command_reset, DALI_RESET, _MODE_REPEAT_TWICE_},
+	{command_reset, DALI_RESET, _MODE_REPEAT_TWICE_},
 	//dtr commands	
-    {command_store_level_dtr, DALI_STORE_ACTUAL_DIM_LEVEL_IN_DTR, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_max, DALI_STORE_THE_DTR_AS_MAX_LEVEL, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_min, DALI_STORE_THE_DTR_AS_MIN_LEVEL, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_system_failure, DALI_STORE_THE_DTR_AS_SYSTEM_FAILURE_LEVEL, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_power_on, DALI_STORE_THE_DTR_AS_POWER_ON_LEVEL, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_fade_time, DALI_STORE_THE_DTR_AS_FADE_TIME, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_fade_rate, DALI_STORE_THE_DTR_AS_FADE_RATE, _MODE_REPEAT_TWICE_},
-    {command_store_dtr_short_address, DALI_STORE_DTR_AS_SHORT_ADDRESS, _MODE_REPEAT_TWICE_},
+	{command_store_level_dtr, DALI_STORE_ACTUAL_DIM_LEVEL_IN_DTR, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_max, DALI_STORE_THE_DTR_AS_MAX_LEVEL, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_min, DALI_STORE_THE_DTR_AS_MIN_LEVEL, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_system_failure, DALI_STORE_THE_DTR_AS_SYSTEM_FAILURE_LEVEL, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_power_on, DALI_STORE_THE_DTR_AS_POWER_ON_LEVEL, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_fade_time, DALI_STORE_THE_DTR_AS_FADE_TIME, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_fade_rate, DALI_STORE_THE_DTR_AS_FADE_RATE, _MODE_REPEAT_TWICE_},
+	{command_store_dtr_short_address, DALI_STORE_DTR_AS_SHORT_ADDRESS, _MODE_REPEAT_TWICE_},
 	//query
 	{command_query_status, DALI_QUERY_STATUS, _MODE_QUERY_},
 	{command_query_ballast, DALI_QUERY_BALLAST, _MODE_QUERY_},
@@ -316,7 +316,7 @@ int decode_command_to_frame(char* token, word* output)
 		if(param2 > 255 || param2 < 0)
 			return _ERR_PARSE_ERROR_;
 	}
-	
+
 	if(!strcmp_P(command, command_arc))
 	{
 		if(has_param1 && has_param2)
@@ -366,7 +366,7 @@ int decode_command_to_frame(char* token, word* output)
 		if(!strcmp(groupify, command))
 		{
 			if(has_param1)
-			{			
+			{
 				ret = dali_group_command(output, (byte)param1, command_list[i].value);
 				if(ret == _ERR_OK_)
 					return command_list[i].mode;
@@ -381,9 +381,9 @@ int decode_command_to_frame(char* token, word* output)
 	{
 		if(!strcmp_P(command, command_with_param_list[i].key))
 		{
-			if(has_param1 && has_param2)
+			if(param2 < 16 && param2 > 0 && has_param1 && has_param2)
 			{
-				ret = dali_slave_command(output, (byte)param1, command_with_param_list[i].value);
+				ret = dali_slave_command(output, (byte)param1, command_with_param_list[i].value + param2);
 				if(ret == _ERR_OK_)
 					return command_with_param_list[i].mode;
 				else
@@ -400,9 +400,9 @@ int decode_command_to_frame(char* token, word* output)
 		strcat(groupify, group_postfix);
 		if(!strcmp(groupify, command))
 		{
-			if(has_param1 && has_param2)
-			{			
-				ret = dali_group_command(output, (byte)param1, command_with_param_list[i].value);
+			if(param2 < 16 && param2 > 0 && has_param1 && has_param2)
+			{
+				ret = dali_group_command(output, (byte)param1, command_with_param_list[i].value + param2);
 				if(ret == _ERR_OK_)
 					return command_with_param_list[i].mode;
 				else
@@ -423,7 +423,7 @@ int decode_command_to_frame(char* token, word* output)
 				return ret;
 		}
 	}
-	
-		
+
+
 	return _ERR_UNIMPLEMENTED_;
 }
