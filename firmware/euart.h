@@ -8,6 +8,12 @@ extern "C"
 {
 #endif
 
+#include "eusart_drv.h"
+
+typedef enum encoding_mode {LEVEL, MANCHESTER} t_encoding;
+typedef enum bit_order {MSB_FIRST, LSB_FIRST} t_bit_order;
+typedef enum parity_type {PARITY_NONE=0x00,PARITY_EVEN=0x20, PARITY_ODD=0x30} t_parity_type;
+
 #if (defined __C51__)
 typedef bit                 Bool;    // Shall be used with _MEM_TYPE_BIT_ to optimize the memory.
 #else
@@ -47,7 +53,7 @@ typedef union
 
 extern Uint8 eusart_rx_error;
 
-void euart_init();
+Bool euart_init();
 
 Bool euart_tx_done(void);
 

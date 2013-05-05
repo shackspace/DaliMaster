@@ -11,6 +11,8 @@ extern "C"
 {
 #endif
 
+extern volatile unsigned char test;
+
 extern void suart_init();
 
 #ifdef SUART_TXD

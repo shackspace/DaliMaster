@@ -5,10 +5,10 @@ avr = Environment()
  
 Target="DaliMaster"
 mcu="at90pwm316"
-F_CPU=16e6
+F_CPU=16000000
  
 # Add all additional source files to compile
-src="""dali.c dali_encode.c euart.c fifo.c Interpreter.c suart.c"""
+src="""dali.c dali_encode.c eusart_lib.c fifo.c Interpreter.c suart.c"""
  
 # Add Source Path here
 cpppath=""" . """
@@ -34,6 +34,7 @@ avr.Append(CCFLAGS = "-O%s" % opt)
 avr.Append(CCFLAGS = "-Wall" )
 avr.Append(CCFLAGS = "-DF_CPU=%i" % F_CPU)
 avr.Append(CCFLAGS = "-std=c99")
+avr.Append(CCFLAGS = "-g")
 avr.Append(CCFLAGS = Split(flags))
  
 # Execute AVR-GCC

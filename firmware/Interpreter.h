@@ -17,6 +17,9 @@ extern "C"
 #define _ERR_PARAMETER_MISSING_ -255
 #define _ERR_UNIMPLEMENTED_ -256
 
+#define _ERR_ACK 9000
+#define _ERR_NACK 9001
+
 inline char nibble_to_ascii(uint8_t nibble);
 
 inline char ascii_to_nibble(char nibble);

@@ -1,11 +1,11 @@
 #include <avr/io.h>
-#include <avr/wdt.h>
 
 #include "suart.h"
 
 #include "fifo.h" 
+#include <util/delay.h>
 
-#define BAUDRATE 115200
+#define BAUDRATE 9600
 
 #define nop() __asm volatile ("nop")
 
@@ -25,7 +25,7 @@
     static volatile uint8_t inbits, received;
 
     #ifdef _FIFO_H_
-        #define INBUF_SIZE 16
+        #define INBUF_SIZE 4
         static uint8_t inbuf[INBUF_SIZE];
         fifo_t infifo;
     #else // _FIFO_H_ 
@@ -33,6 +33,9 @@
     #endif // _FIFO_H_ 
 #endif // SUART_RXD 
 
+// Initialisierung für einen ATmega8 
+// Für andere AVR-Derivate sieht dies vermutlich anders aus: 
+// Registernamen ändern sich (zB TIMSK0 anstatt TIMSK, etc). 
 void suart_init()
 {
     uint8_t tifr = 0;
@@ -50,8 +53,9 @@ void suart_init()
     OCR1A = (uint16_t) ((uint32_t) F_CPU/BAUDRATE);
 
 #ifdef SUART_RXD
+    GTCCR = (1 << ICPSEL1);
     SUART_RXD_DDR  &= ~(1 << SUART_RXD_BIT);
-    SUART_RXD_PORT |=  (1 << SUART_RXD_BIT);
+    SUART_RXD_PORT &= ~(1 << SUART_RXD_BIT);
     TIMSK1 |= (1 << ICIE1);
     tifr  |= (1 << ICF1) | (1 << OCF1B);
 #else
@@ -91,15 +95,20 @@ void suart_putc (const char c)
 
     sei();
 }
+#endif // SUART_TXD 
 
-void suart_putstring(char* string)
+#ifdef SUART_TXD
+
+void suart_putstring(char* s)
 {
-    while(*string)
+    while(*s)
     {
-        suart_putc(*string);
-        string++;
+        suart_putc(*s);
+	s++;
+	_delay_ms(1);
     }
 }
+
 #endif // SUART_TXD 
 
 #ifdef SUART_TXD
@@ -189,10 +198,9 @@ int suart_getc_nowait()
 
 int suart_getc_wait()
 {
-    while (!received)   {wdt_reset();}
+    while (!received)   {}
     received = 0;
-    wdt_reset();   
-
+   
     return (int) indata;
 }
 

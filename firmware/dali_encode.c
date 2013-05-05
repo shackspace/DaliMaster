@@ -26,6 +26,14 @@ int dali_group_direct_arc(word *output, byte address, byte brightness)
 	return _ERR_OK_;
 }
 
+int dali_broadcast_direct_arc(word *output, byte brightness)
+{
+	brightness = brightness > 254 ? 254 : brightness; //direct arc value can be 254 maximum
+	
+	*output = 0xFE00 + brightness; //Frame: 11111110 BBBBBBBB
+	return _ERR_OK_;
+}
+
 int dali_slave_command(word *output, byte address, byte command)
 {
 	if(address > 63)
@@ -80,6 +88,32 @@ int dali_group_command(word *output, byte address, byte command)
 	return _ERR_OK_;
 }
 
+int dali_broadcast_command(word *output, byte command)
+{
+	if(!((command & 0xF0) ^ 0x30)) //command 0011xxxx is reserved
+		return _ERR_RESERVED_COMMAND_;
+	if(!((command & 0xF0) ^ 0x80)) //command 1000xxxx is reserved
+		return _ERR_RESERVED_COMMAND_;
+	if(!((command & 0xFC) ^ 0x9C)) //command 100111xx is reserved
+		return _ERR_RESERVED_COMMAND_;
+	if(!((command & 0xF0) ^ 0xA0)) //command 1010xxxx is reserved
+		return _ERR_RESERVED_COMMAND_;
+	if(!((command & 0xE0) ^ 0xC0)) //command 110xxxxx is reserved
+		return _ERR_RESERVED_COMMAND_;
+
+	if((command == DALI_GO_TO_SCENE) || 
+	(command == DALI_STORE_THE_DTR_AS_SCENE) || 
+	(command == DALI_REMOVE_FROM_SCENE) ||
+	(command == DALI_ADD_TO_GROUP) ||
+	(command == DALI_REMOVE_FROM_GROUP) ||
+	(command == DALI_QUERY_SCENE_LEVEL))
+		return _ERR_WRONG_COMMAND_;
+	
+	*output = 0xFF00 + command;  //Frame: 11111111 CCCCCCCC
+	return _ERR_OK_;
+}
+
+
 int dali_slave_command_with_param(word *output, byte address, byte command, byte param)
 {
 	if(address > 63)
@@ -116,6 +150,25 @@ int dali_group_command_with_param(word *output, byte address, byte command, byte
 	(command == DALI_QUERY_SCENE_LEVEL))
 	{
 		*output = ((0x81 + (address << 1)) << 8) + command + param;  //Frame: 100AAAA1 CCCCPPPP
+		return _ERR_OK_;
+	}
+	else
+		return _ERR_WRONG_COMMAND_;
+}
+
+int dali_broadcast_command_with_param(word *output, byte command, byte param)
+{
+	if(param > 15)
+		return _ERR_WRONG_COMMAND_;
+		
+	if((command == DALI_GO_TO_SCENE) || 
+	(command == DALI_STORE_THE_DTR_AS_SCENE) || 
+	(command == DALI_REMOVE_FROM_SCENE) ||
+	(command == DALI_ADD_TO_GROUP) ||
+	(command == DALI_REMOVE_FROM_GROUP) ||
+	(command == DALI_QUERY_SCENE_LEVEL))
+	{
+		*output = 0xFF00 + command + param;  //Frame: 100AAAA1 CCCCPPPP
 		return _ERR_OK_;
 	}
 	else

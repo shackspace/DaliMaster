@@ -22,6 +22,7 @@ typedef byte bool;
 const char identifier_message[] _PROGMEM = "DALI Master\r\n";
 
 const char group_postfix[] _PROGMEM = "_g";
+const char broadcast_postfix[] _PROGMEM = "_b";
 
 //special commands
 const char command_randomize[] _PROGMEM = "randomize";
@@ -42,6 +43,7 @@ const char command_enable_device_type[] _PROGMEM = "enable_device_type";
 //set level directly
 const char command_arc[] _PROGMEM = "arc";
 const char command_arc_group[] _PROGMEM = "arc_g";
+const char command_arc_broadcast[] _PROGMEM = "arc_b";
 
 //arc commands
 const char command_off[] _PROGMEM = "off";
@@ -49,19 +51,19 @@ const char command_up[] _PROGMEM = "up";
 const char command_down[] _PROGMEM = "down";
 const char command_step_up[] _PROGMEM = "step_up";
 const char command_step_down[] _PROGMEM = "step_down";
-const char command_max_level[] _PROGMEM = "max";
-const char command_min_level[] _PROGMEM = "min";
-const char command_step_off[] _PROGMEM = "step_down_off";
-const char command_step_on[] _PROGMEM = "step_up_on";
+const char command_max_level[] _PROGMEM = "recall_max_level";
+const char command_min_level[] _PROGMEM = "recall_min_level";
+const char command_step_off[] _PROGMEM = "step_down_and_off";
+const char command_step_on[] _PROGMEM = "on_and_step_up";
 const char command_reset[] _PROGMEM = "reset";
 const char command_store_level_dtr[] _PROGMEM = "store_level_dtr";
-const char command_store_dtr_max[] _PROGMEM = "store_dtr_max";
-const char command_store_dtr_min[] _PROGMEM = "store_dtr_min";
-const char command_store_dtr_system_failure[] _PROGMEM = "store_dtr_system_failure";
-const char command_store_dtr_power_on[] _PROGMEM = "store_dtr_power_on";
-const char command_store_dtr_fade_time[] _PROGMEM = "store_dtr_fade_time";
-const char command_store_dtr_fade_rate[] _PROGMEM = "store_dtr_fade_rate";
-const char command_store_dtr_short_address[] _PROGMEM = "store_dtr_short_address";
+const char command_store_dtr_max[] _PROGMEM = "store_dtr_as_max_level";
+const char command_store_dtr_min[] _PROGMEM = "store_dtr_as_min_level";
+const char command_store_dtr_system_failure[] _PROGMEM = "store_dtr_as_system_failure_level";
+const char command_store_dtr_power_on[] _PROGMEM = "store_dtr_as_power_on_level";
+const char command_store_dtr_fade_time[] _PROGMEM = "store_dtr_as_fade_time";
+const char command_store_dtr_fade_rate[] _PROGMEM = "store_dtr_as_fade_rate";
+const char command_store_dtr_short_address[] _PROGMEM = "store_dtr_as_short_address";
 
 //query
 const char command_query_status[] _PROGMEM = "query_status";
@@ -90,7 +92,7 @@ const char command_query_random_address_l[] _PROGMEM = "query_random_address_l";
 
 
 //commands with param
-const char command_goto_scene[] _PROGMEM = "scene";
+const char command_goto_scene[] _PROGMEM = "go_to_scene";
 const char command_remove_from_scene[] _PROGMEM = "remove_scene";
 const char command_add_to_group[] _PROGMEM = "add_group";
 const char command_remove_from_group[] _PROGMEM = "remove_group";
@@ -98,6 +100,9 @@ const char command_store_dtr_scene[] _PROGMEM = "store_dtr_scene";
 
 //query with param
 const char command_query_scene_level[] _PROGMEM = "query_scene_level";
+
+const char NACK[] _PROGMEM = "NACK";
+const char ACK[] _PROGMEM = "ACK";
 
 typedef struct key_value_mode	
 {
@@ -191,7 +196,7 @@ const key_special_mode special_command_list[] = {
 	{command_enable_device_type, ENABLE_DEVICE_TYPE, _MODE_SIMPLE_}
 	};
 
-inline char nibble_to_ascii(uint8_t nibble)
+char nibble_to_ascii(uint8_t nibble)
 {		
 	nibble = nibble & 0x0F;
 	if(nibble < 0x0A)
@@ -200,7 +205,7 @@ inline char nibble_to_ascii(uint8_t nibble)
 		return nibble + 'A' - 0x0A;
 }
 
-inline char ascii_to_nibble(char nibble)
+char ascii_to_nibble(char nibble)
 {		
 	if(isdigit(nibble))
 		return nibble - '0';
@@ -251,7 +256,7 @@ inline int parse_int(char* string, int16_t* integer)
 int decode_command_to_frame(char* token, word* output)
 {
 	char command[MAX_COMMAND_LENGTH+1] = {0};
-	char groupify[MAX_COMMAND_LENGTH] = {0};
+	char compare_string[MAX_COMMAND_LENGTH] = {0};
 	char param1_string[MAX_COMMAND_LENGTH+1] = {0};
 	char param2_string[MAX_COMMAND_LENGTH+1] = {0};
 	bool has_param1 = FALSE;
@@ -267,11 +272,17 @@ int decode_command_to_frame(char* token, word* output)
 	const uint16_t length = strlen(token);
 	if(length == 0)
 		return _ERR_PARSE_ERROR_;
-	for(i = 0; (i < length) && (token[i] == ' '); i++); //discard leading spaces 
+	i = 0;
+	for(u = 0; (u < length); u++)
+	{
+		if(token[u] == '#')
+			i = u + 1; //discard beginning of shell command line
+	}
+	for(; (i < length) && (token[i] == ' '); i++); //discard leading spaces 
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n')	; i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n') && (token[i] != '\r'); i++)
 	{
 		if(i-u >= MAX_COMMAND_LENGTH)
 			return _ERR_PARSE_ERROR_;
@@ -282,7 +293,7 @@ int decode_command_to_frame(char* token, word* output)
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n'); i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n') && (token[i] != '\r'); i++)
 	{
 		has_param1 = TRUE;
 		if(i-u >= MAX_COMMAND_LENGTH)
@@ -294,7 +305,7 @@ int decode_command_to_frame(char* token, word* output)
 
 	u = i;
 
-	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n'); i++)
+	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n') && (token[i] != '\r'); i++)
 	{
 		has_param2 = TRUE;
 		if(i-u >= MAX_COMMAND_LENGTH)
@@ -341,6 +352,18 @@ int decode_command_to_frame(char* token, word* output)
 		return _ERR_PARAMETER_MISSING_;
 	}
 
+	if(!strcmp_P(command, command_arc_broadcast))
+	{
+		if(has_param1)
+		{
+			ret = dali_broadcast_direct_arc(output, (byte)param1);
+			if(ret == _ERR_OK_)
+				return _MODE_SIMPLE_;
+			else return ret;
+		}
+		return _ERR_PARAMETER_MISSING_;
+	}
+
 
 	for(i = 0; i < COUNT_COMMANDS; i++)
 	{
@@ -361,9 +384,9 @@ int decode_command_to_frame(char* token, word* output)
 
 	for(i = 0; i < COUNT_COMMANDS; i++)
 	{
-		strcpy_P(groupify, command_list[i].key);
-		strcat(groupify, group_postfix);
-		if(!strcmp(groupify, command))
+		strcpy_P(compare_string, command_list[i].key);
+		strcat(compare_string, group_postfix);
+		if(!strcmp(compare_string, command))
 		{
 			if(has_param1)
 			{
@@ -377,13 +400,29 @@ int decode_command_to_frame(char* token, word* output)
 		}
 	}
 
+	for(i = 0; i < COUNT_COMMANDS; i++)
+	{
+		strcpy_P(compare_string, command_list[i].key);
+		strcat(compare_string, broadcast_postfix);
+		if(!strcmp(compare_string, command))
+		{
+			
+			
+			ret = dali_broadcast_command(output, command_list[i].value);
+			if(ret == _ERR_OK_)
+				return command_list[i].mode;
+			else
+				return ret;
+		}
+	}
+
 	for(i = 0; i < COUNT_COMMANDS_WITH_PARAM; i++)
 	{
 		if(!strcmp_P(command, command_with_param_list[i].key))
 		{
-			if(param2 < 16 && param2 > 0 && has_param1 && has_param2)
+			if(has_param1 && has_param2)
 			{
-				ret = dali_slave_command(output, (byte)param1, command_with_param_list[i].value + param2);
+				ret = dali_slave_command_with_param(output, (byte)param1, command_with_param_list[i].value, param2);
 				if(ret == _ERR_OK_)
 					return command_with_param_list[i].mode;
 				else
@@ -396,13 +435,31 @@ int decode_command_to_frame(char* token, word* output)
 
 	for(i = 0; i < COUNT_COMMANDS_WITH_PARAM; i++)
 	{
-		strcpy_P(groupify, command_with_param_list[i].key);
-		strcat(groupify, group_postfix);
-		if(!strcmp(groupify, command))
+		strcpy_P(compare_string, command_with_param_list[i].key);
+		strcat(compare_string, group_postfix);
+		if(!strcmp(compare_string, command))
 		{
-			if(param2 < 16 && param2 > 0 && has_param1 && has_param2)
+			if(has_param1 && has_param2)
 			{
-				ret = dali_group_command(output, (byte)param1, command_with_param_list[i].value + param2);
+				ret = dali_group_command_with_param(output, (byte)param1, command_with_param_list[i].value, param2);
+				if(ret == _ERR_OK_)
+					return command_with_param_list[i].mode;
+				else
+					return ret;
+			}
+			return _ERR_PARAMETER_MISSING_;
+		}
+	}
+
+	for(i = 0; i < COUNT_COMMANDS_WITH_PARAM; i++)
+	{
+		strcpy_P(compare_string, command_with_param_list[i].key);
+		strcat(compare_string, broadcast_postfix);
+		if(!strcmp(compare_string, command))
+		{
+			if(has_param1)
+			{
+				ret = dali_broadcast_command_with_param(output, command_with_param_list[i].value, param1);
 				if(ret == _ERR_OK_)
 					return command_with_param_list[i].mode;
 				else
@@ -423,6 +480,11 @@ int decode_command_to_frame(char* token, word* output)
 				return ret;
 		}
 	}
+
+	if(!strcmp_P(command, NACK))
+		return _ERR_NACK;
+	if(!strcmp_P(command, ACK))
+		return _ERR_ACK;
 
 
 	return _ERR_UNIMPLEMENTED_;

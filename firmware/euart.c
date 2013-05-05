@@ -131,6 +131,8 @@
 #  define LSB(Uint16)        (((Uint8* )&Uint16)[1])
 #endif
 
+
+
 Uint8 eusart_rx_error;
 
 void euart_init()
@@ -141,10 +143,10 @@ void euart_init()
 
 	EUSART_enable_msb_first();
 
-	EUSART_set_mubrr(F_CPU, 1200);
-	EUSART_set_ubrr(F_CPU,  1200);
+	EUSART_set_mubrr(F_CPU, 2400);
+	EUSART_set_ubrr(F_CPU,  00);
 
-	EUSART_set_size(16, 8);
+	EUSART_set_size(MSK_EUSART_TX_16BIT, MSK_EUSART_RX_8BIT);
 
 	UART_set_two_tx_stop();
 	EUSART_set_two_rx_stop(); 
@@ -152,7 +154,7 @@ void euart_init()
 	EUSART_enable_rx();
 	EUSART_enable_tx();
 
-	EUSART_enable_rx_interrupt();
+	//EUSART_enable_rx_interrupt();
 }
 
 Bool euart_tx_done(void)
