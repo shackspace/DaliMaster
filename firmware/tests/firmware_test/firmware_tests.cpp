@@ -171,6 +171,12 @@ TEST(ParserTestValidInputString, POSITIVE)
 
     EXPECT_EQ(frame2, frame);
 
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("go_to_scene_b 5", &frame));
+
+    EXPECT_EQ(_ERR_OK_,dali_broadcast_command_with_param(&frame2, DALI_GO_TO_SCENE, 5));
+
+    EXPECT_EQ(frame2, frame);
+
     EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up_b", &frame));
 
     EXPECT_EQ(_ERR_OK_, dali_broadcast_command(&frame2, DALI_UP_200MS));

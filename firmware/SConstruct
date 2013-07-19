@@ -8,7 +8,7 @@ mcu="at90pwm316"
 F_CPU=16000000
  
 # Add all additional source files to compile
-src="""dali.c dali_encode.c eusart_lib.c fifo.c Interpreter.c suart.c"""
+src="""dali.c dali_encode.c eusart_lib.c fifo.c Interpreter.c startup_values.c suart.c"""
  
 # Add Source Path here
 cpppath=""" . """
@@ -18,7 +18,7 @@ cpath = """ . """
 # Optimization level, can be [0, 1, 2, 3, s].
 # 0 = turn off optimization. s = optimize for size.
 # (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
-opt = "s"
+opt = "1"
  
 # Add Additional Compiler Flags
 flags=""" """

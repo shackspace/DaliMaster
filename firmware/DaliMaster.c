@@ -7,6 +7,7 @@
 #include "dali.h"
 #include "suart.h"
 #include "Interpreter.h"
+#include "startup_values.h"
 
 const char* username = "";
 const char* password = "";
@@ -18,8 +19,7 @@ int main()
 	fifo_t fifo;	
 	word frame;
 	int ret;
-	int i = 0;
-	int temp2;
+	int i = 0;	
 
 	//buffer for temporary strings
 	byte temp[MAX_BUFFER_LENGTH+1];
@@ -29,14 +29,19 @@ int main()
 	dali_init();
 	fifo_init(&fifo, buffer, MAX_BUFFER_LENGTH);
 
+	load_startup_values();
+	send_startup_values();
+
 	sei();
-	//wait until 4 sec no messages via uart --> boot time has ended
-	for(i = 0; i < 400; i++)
+	//wait until 7 sec no messages via uart --> boot time has ended
+	for(i = 0; i < 7000; i++)
 	{
-		if(suart_getc_nowait () > -1)
+		while(suart_getc_nowait () > -1)
+		{
 			i = 0;
+		}
 		
-		_delay_ms(10);
+		_delay_ms(1);
 	}
 	
 	//now login
@@ -62,9 +67,9 @@ int main()
 		if(c == '\n' || c == '\r') // '\n' is end of command
 		{
 			_inline_fifo_get_chars( &fifo, temp, fifo.count);
-			if(strlen(temp) > 2)
+			if(strlen((const char*)temp) > 2)
 			{	
-				ret = decode_command_to_frame(temp, &frame);
+				ret = decode_command_to_frame((char*)temp, &frame);
 				if(ret > 0)
 				{
 					if(_MODE_SIMPLE_ == ret)

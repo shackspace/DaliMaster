@@ -1,5 +1,6 @@
 #include "Interpreter.h"
 #include "dali_encode.h"
+#include "startup_values.h"
 #include "dali.h"
 #include <ctype.h>
 
@@ -104,6 +105,9 @@ const char command_query_scene_level[] _PROGMEM = "query_scene_level";
 const char NACK[] _PROGMEM = "NACK";
 const char ACK[] _PROGMEM = "ACK";
 
+const char internal_command_save_current_as_default[] = "save_current_as_default";
+const char internal_command_clear_default_values[] = "clear_default_values";
+
 typedef struct key_value_mode	
 {
 	const char* key;
@@ -203,9 +207,9 @@ char nibble_to_ascii(uint8_t nibble)
 		return nibble + '0';
 	else
 		return nibble + 'A' - 0x0A;
-}
+}	
 
-char ascii_to_nibble(char nibble)
+/*char ascii_to_nibble(char nibble)
 {		
 	if(isdigit(nibble))
 		return nibble - '0';
@@ -213,7 +217,7 @@ char ascii_to_nibble(char nibble)
 		return nibble - 'A' + 0x0A;
 	else
 		return -1;
-}
+}*/	
 
 inline int parse_int(char* string, int16_t* integer)
 {
@@ -334,7 +338,10 @@ int decode_command_to_frame(char* token, word* output)
 		{
 			ret = dali_slave_direct_arc(output, (byte)param1, (byte)param2);
 			if(ret == _ERR_OK_)
+			{
+				arc_device[param1] = param2;			
 				return _MODE_SIMPLE_;
+			}
 			else return ret;
 		}
 		return _ERR_PARAMETER_MISSING_;
@@ -346,7 +353,10 @@ int decode_command_to_frame(char* token, word* output)
 		{
 			ret = dali_group_direct_arc(output, (byte)param1, (byte)param2);
 			if(ret == _ERR_OK_)
+			{
+				arc_group[param1] = param2;
 				return _MODE_SIMPLE_;
+			}
 			else return ret;
 		}
 		return _ERR_PARAMETER_MISSING_;
@@ -486,6 +496,17 @@ int decode_command_to_frame(char* token, word* output)
 	if(!strcmp_P(command, ACK))
 		return _ERR_ACK;
 
+	if(!strcmp(command, internal_command_save_current_as_default))
+	{		
+		save_startup_values();
+		return _ERR_ACK;
+	}
+
+	if(!strcmp(command, internal_command_clear_default_values))
+	{		
+		clear_startup_values();
+		return _ERR_ACK;
+	}
 
 	return _ERR_UNIMPLEMENTED_;
 }

@@ -151,10 +151,19 @@ void euart_init()
 	UART_set_two_tx_stop();
 	EUSART_set_two_rx_stop(); 
 
-	EUSART_enable_rx();
+	//EUSART_enable_rx();
+	EUSART_disable_rx();
 	EUSART_enable_tx();
 
 	//EUSART_enable_rx_interrupt();
+}
+
+Bool euart_enable_rx(Bool enable)
+{
+	if(enable)
+		EUSART_enable_rx();
+	else
+		EUSART_disable_rx();
 }
 
 Bool euart_tx_done(void)

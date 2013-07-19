@@ -99,7 +99,7 @@ void suart_putc (const char c)
 
 #ifdef SUART_TXD
 
-void suart_putstring(char* s)
+void suart_putstring(const char* s)
 {
     while(*s)
     {

@@ -17,6 +17,7 @@ SET ( SOURCE_FILES
 	firmware_tests.cpp
 	../../dali_encode.c
 	../../Interpreter.c
+	../../startup_values.c
 )
 
 add_definitions( -DTEST -Dgtest_build_tests=ON	)

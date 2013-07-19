@@ -20,9 +20,7 @@ extern "C"
 #define _ERR_ACK 9000
 #define _ERR_NACK 9001
 
-inline char nibble_to_ascii(uint8_t nibble);
-
-inline char ascii_to_nibble(char nibble);
+char nibble_to_ascii(uint8_t nibble);
 
 int decode_command_to_frame(char* token, word* output);
 

@@ -55,6 +55,8 @@ extern Uint8 eusart_rx_error;
 
 Bool euart_init();
 
+Bool euart_enable_rx(Bool enable);
+
 Bool euart_tx_done(void);
 
 Uint16 euart_put(Uint16 uc_wr_byte);

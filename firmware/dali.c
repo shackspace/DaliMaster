@@ -8,6 +8,8 @@ void dali_init()
 
 	eusart_init (MSK_EUSART_TX_16BIT, MSK_EUSART_RX_8BIT, MANCHESTER, MSB_FIRST, 16000000, 600, PARITY_NONE, 2, 2);
 
+	eusart_disable_rx();
+
 }
 
 int dali_send(word frame)
@@ -35,6 +37,7 @@ int dali_query(word frame, byte* result)
 	if(frame == INVALID_FRAME)
 		return _ERR_INVALID_FRAME_;	
 	eusart_put(frame);
+	eusart_enable_rx();
 	_delay_ms(20);
 	for(i = 0; i < 50; i++)
 	{
@@ -42,4 +45,6 @@ int dali_query(word frame, byte* result)
 		if(eusart_rx_ready())
 			*result = eusart_get();
 	}
+	eusart_disable_rx();
+	return _ERR_OK_;
 }
