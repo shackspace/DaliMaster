@@ -30,7 +30,7 @@ int main()
 	fifo_init(&fifo, buffer, MAX_BUFFER_LENGTH);
 
 	load_startup_values();
-	send_startup_values();
+	send_startup_values(); //default ARC values are stored in EEPROM --> send them to get all lamps into a default setup
 
 	sei();
 	//wait until 7 sec no messages via uart --> boot time has ended
@@ -57,19 +57,19 @@ int main()
 	//if no username exist ---> simply login via pressing enter (no password is set in openwrt router)
 	suart_putc('\n');
 
-	//wdt_enable(WDTO_2S );
+	//wdt_enable(WDTO_2S ); //watchdog not needed
 
 	for(;;)
 	{
 		ret = 0;		
-		byte c = suart_getc_wait () & 0xFF;
-	  	fifo_put(&fifo, c);
-		if(c == '\n' || c == '\r') // '\n' is end of command
-		{
-			_inline_fifo_get_chars( &fifo, temp, fifo.count);
-			if(strlen((const char*)temp) > 2)
+		byte c = suart_getc_wait () & 0xFF; //until no char arrived no action is needed!
+	  	fifo_put(&fifo, c); //put last char into fifo
+		if(c == '\n' || c == '\r') // '\n' is end of command. if char is not '\n' or '\r' begin at front of loop
+		{ //command has to be evaluated
+			_inline_fifo_get_chars( &fifo, temp, fifo.count); //copy whole fifo into temp (buffer is a ringbuffer, so cannot be used)
+			if(strlen((const char*)temp) > 2) //single '\r' or '\n' has not to be evaluated
 			{	
-				ret = decode_command_to_frame((char*)temp, &frame);
+				ret = decode_command_to_frame((char*)temp, &frame); //frame is 2 bytes long. decode_command_to_frame is returning type of frame (SIMPLE, REPEAT_TWICE, QUERY)
 				if(ret > 0)
 				{
 					if(_MODE_SIMPLE_ == ret)

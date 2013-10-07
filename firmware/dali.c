@@ -39,7 +39,7 @@ int dali_query(word frame, byte* result)
 	eusart_put(frame);
 	eusart_enable_rx();
 	_delay_ms(20);
-	for(i = 0; i < 50; i++)
+	for(i = 0; i < 100; i++)
 	{
 		_delay_ms(1);
 		if(eusart_rx_ready())

@@ -16048,10 +16048,6 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <part name="GND32" library="supply1" deviceset="GND" device=""/>
 <part name="VDD5" library="supply1" deviceset="VDD" device=""/>
 <part name="VDD6" library="supply1" deviceset="VDD" device=""/>
-<part name="T4" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT3904LT1"/>
-<part name="R27" library="resistor" deviceset="R-EU_" device="R0603" value="10k"/>
-<part name="P+3" library="supply1" deviceset="+5V" device=""/>
-<part name="GND33" library="supply1" deviceset="GND" device=""/>
 <part name="X2" library="con-molex" deviceset="22-23-2021" device=""/>
 <part name="J2" library="con-jack" deviceset="JACK-PLUG" device="1"/>
 <part name="R28" library="resistor" deviceset="R-EU_" device="0207/2V"/>
@@ -16080,9 +16076,9 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <instance part="R22" gate="G$1" x="525.78" y="35.56" rot="R270"/>
 <instance part="C12" gate="G$1" x="518.16" y="43.18"/>
 <instance part="R20" gate="G$1" x="485.14" y="68.58" rot="R270"/>
-<instance part="GND2" gate="1" x="566.42" y="50.8"/>
-<instance part="R26" gate="G$1" x="566.42" y="81.28" rot="R270"/>
-<instance part="P+1" gate="1" x="566.42" y="91.44"/>
+<instance part="GND2" gate="1" x="566.42" y="43.18"/>
+<instance part="R26" gate="G$1" x="566.42" y="53.34" rot="R270"/>
+<instance part="P+1" gate="1" x="566.42" y="76.2"/>
 <instance part="P+2" gate="1" x="492.76" y="81.28"/>
 <instance part="C7" gate="G$1" x="215.9" y="27.94" rot="R180"/>
 <instance part="C8" gate="G$1" x="220.98" y="27.94" rot="R180"/>
@@ -16188,10 +16184,6 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <instance part="GND32" gate="1" x="17.78" y="104.14"/>
 <instance part="VDD5" gate="G$1" x="17.78" y="116.84"/>
 <instance part="VDD6" gate="G$1" x="25.4" y="116.84"/>
-<instance part="T4" gate="G$1" x="574.04" y="73.66"/>
-<instance part="R27" gate="G$1" x="576.58" y="83.82" rot="R270"/>
-<instance part="P+3" gate="1" x="576.58" y="91.44"/>
-<instance part="GND33" gate="1" x="576.58" y="50.8"/>
 <instance part="X2" gate="-1" x="487.68" y="114.3" rot="R180"/>
 <instance part="X2" gate="-2" x="487.68" y="109.22" rot="R180"/>
 <instance part="J2" gate="G$1" x="10.16" y="73.66" rot="MR180"/>
@@ -16336,11 +16328,6 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 </net>
 <net name="GND" class="0">
 <segment>
-<pinref part="IC4" gate="CE" pin="E"/>
-<pinref part="GND2" gate="1" pin="GND"/>
-<wire x1="566.42" y1="60.96" x2="566.42" y2="53.34" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="C7" gate="G$1" pin="1"/>
 <pinref part="GND9" gate="1" pin="GND"/>
 </segment>
@@ -16482,21 +16469,16 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <pinref part="GND32" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="T4" gate="G$1" pin="E"/>
-<pinref part="GND33" gate="1" pin="GND"/>
-<wire x1="576.58" y1="53.34" x2="576.58" y2="68.58" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="R29" gate="G$1" pin="1"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 </segment>
+<segment>
+<pinref part="R26" gate="G$1" pin="2"/>
+<pinref part="GND2" gate="1" pin="GND"/>
+<wire x1="566.42" y1="48.26" x2="566.42" y2="45.72" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="+5V" class="0">
-<segment>
-<pinref part="P+1" gate="1" pin="+5V"/>
-<pinref part="R26" gate="G$1" pin="1"/>
-<wire x1="566.42" y1="88.9" x2="566.42" y2="86.36" width="0.1524" layer="91"/>
-</segment>
 <segment>
 <pinref part="IC3" gate="LED" pin="A"/>
 <wire x1="500.38" y1="71.12" x2="492.76" y2="71.12" width="0.1524" layer="91"/>
@@ -16561,24 +16543,16 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <junction x="254" y="129.54"/>
 </segment>
 <segment>
-<pinref part="R27" gate="G$1" pin="1"/>
-<pinref part="P+3" gate="1" pin="+5V"/>
-</segment>
-<segment>
 <pinref part="R28" gate="G$1" pin="2"/>
 <pinref part="P+4" gate="1" pin="+5V"/>
 </segment>
+<segment>
+<pinref part="P+1" gate="1" pin="+5V"/>
+<pinref part="IC4" gate="CE" pin="C"/>
+<wire x1="566.42" y1="73.66" x2="566.42" y2="71.12" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="DALI_RCV" class="0">
-<segment>
-<pinref part="R26" gate="G$1" pin="2"/>
-<pinref part="IC4" gate="CE" pin="C"/>
-<wire x1="566.42" y1="76.2" x2="566.42" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="T4" gate="G$1" pin="B"/>
-<wire x1="566.42" y1="73.66" x2="566.42" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="571.5" y1="73.66" x2="566.42" y2="73.66" width="0.1524" layer="91"/>
-<junction x="566.42" y="73.66"/>
-</segment>
 <segment>
 <pinref part="TP9" gate="G$1" pin="TP"/>
 <pinref part="U$2" gate="G$1" pin="PD4"/>
@@ -16591,11 +16565,8 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <pinref part="J1" gate="G$1" pin="3"/>
 </segment>
 <segment>
-<pinref part="T4" gate="G$1" pin="C"/>
-<pinref part="R27" gate="G$1" pin="2"/>
-<wire x1="576.58" y1="78.74" x2="586.74" y2="78.74" width="0.1524" layer="91"/>
-<junction x="576.58" y="78.74"/>
-<label x="579.12" y="78.74" size="1.778" layer="95"/>
+<wire x1="566.42" y1="58.42" x2="579.12" y2="58.42" width="0.1524" layer="91"/>
+<label x="568.96" y="58.42" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="VDD" class="0">
@@ -16961,6 +16932,14 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <segment>
 <pinref part="U$2" gate="G$1" pin="AREF"/>
 <pinref part="C16" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="IC4" gate="CE" pin="E"/>
+<pinref part="R26" gate="G$1" pin="1"/>
+<wire x1="566.42" y1="60.96" x2="566.42" y2="58.42" width="0.1524" layer="91"/>
+<junction x="566.42" y="58.42"/>
 </segment>
 </net>
 </nets>
