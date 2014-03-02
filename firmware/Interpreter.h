@@ -7,11 +7,11 @@
 
 	
 #ifdef __cplusplus
-extern "C"
+extern "C"	
 {
 #endif
 
-#define MAX_BUFFER_LENGTH 128
+#define MAX_BUFFER_LENGTH 64
 #define _ERR_PARSE_ERROR_ -253
 #define _ERR_BUFFER_FULL_ -254
 #define _ERR_PARAMETER_MISSING_ -255
@@ -22,9 +22,9 @@ extern "C"
 
 char nibble_to_ascii(uint8_t nibble);
 
-int decode_command_to_frame(char* token, word* output);
+int decode_command_to_frame(const char* token, word* output);
 
-int parse_int(char* string, int16_t* integer);
+int parse_int(const char* string, int16_t* integer);
 
 #ifdef __cplusplus
 }

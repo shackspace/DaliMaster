@@ -99,91 +99,103 @@ TEST(ParserTestValidInputString, POSITIVE)
     unsigned short frame;
     unsigned short frame2;
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up 1", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("off 1\r\n").c_str(), &frame));
+
+    dali_slave_command(&frame2, 0x01, DALI_IMMEDIATE_OFF);
+
+    EXPECT_EQ(frame2, frame);
+    
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("off 1\n\r").c_str(), &frame));
+
+    dali_slave_command(&frame2, 0x01, DALI_IMMEDIATE_OFF);
+
+    EXPECT_EQ(frame2, frame);
+
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("up 1").c_str(), &frame));
 
     dali_slave_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up 1\n", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("up 1\n").c_str(), &frame));
 
     dali_slave_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up 1\r\n", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("up 1\r\n").c_str(), &frame));
 
     dali_slave_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up 1\n\r", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("up 1\n\r").c_str(), &frame));
 
     dali_slave_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up_g 1\n", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("up_g 1\n").c_str(), &frame));
 
     dali_group_command(&frame2, 0x01, DALI_UP_200MS);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("arc 1 8\n", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("arc 1 8\n").c_str(), &frame));
 
     dali_slave_direct_arc(&frame2, 0x01, 0x08);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("arc_g 1 8\n", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("arc_g 1 8\n").c_str(), &frame));
 
     dali_group_direct_arc(&frame2, 0x01, 0x08);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame("randomize\n", &frame));
+    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame(std::string("randomize\n").c_str(), &frame));
 
     dali_command_randomize(&frame2  );
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame("initialize 255\n", &frame));
+    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame(std::string("initialize 255\n").c_str(), &frame));
 
     dali_command_initialize_broadcast(&frame2);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame("initialize 255 55 55 55 jkhsdfb\n", &frame)); //overlength of frame, but possible
+    EXPECT_EQ(_MODE_REPEAT_TWICE_, decode_command_to_frame(std::string("initialize 255 55 55 55 jkhsdfb\n").c_str(), &frame)); //overlength of frame, but possible
 
     dali_command_initialize_broadcast(&frame2);
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("terminate", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("terminate").c_str(), &frame));
 
     dali_command_terminate(&frame2);
 
     EXPECT_EQ(frame2,frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("go_to_scene 5 6", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("go_to_scene 5 6").c_str(), &frame));
 
     EXPECT_EQ(_ERR_OK_,dali_slave_command_with_param(&frame2, 5, DALI_GO_TO_SCENE, 6));
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("go_to_scene_b 5", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("go_to_scene_b 5").c_str(), &frame));
 
     EXPECT_EQ(_ERR_OK_,dali_broadcast_command_with_param(&frame2, DALI_GO_TO_SCENE, 5));
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("up_b", &frame));
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("up_b").c_str(), &frame));
 
     EXPECT_EQ(_ERR_OK_, dali_broadcast_command(&frame2, DALI_UP_200MS));
 
     EXPECT_EQ(frame2, frame);
 
-    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame("root@krebsplug:~# up_b", &frame)); //with shell command line
+    EXPECT_EQ(_MODE_SIMPLE_, decode_command_to_frame(std::string("root@krebsplug:~# up_b").c_str(), &frame)); //with shell command line
 
     EXPECT_EQ(_ERR_OK_, dali_broadcast_command(&frame2, DALI_UP_200MS));
 
@@ -195,43 +207,47 @@ TEST(ParserTestInvalidInputString, POSITIVE)
     unsigned short frame;
     unsigned short frame2;
 
-    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("up 1000\n", &frame));
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame(std::string("up 1000\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("up up 10\n", &frame));
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame(std::string("up up 10\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame("updown 10 39\n", &frame));
+    EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame(std::string("updown 10 39\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame("up10 39\n", &frame));
+    EXPECT_EQ(_ERR_UNIMPLEMENTED_, decode_command_to_frame(std::string("up10 39\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame("go_to_scene 7\n", &frame));
+    EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame(std::string("go_to_scene 7\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame("arc 7\n", &frame));
+    EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame(std::string("arc 7\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("scenescenescenescenescenescenescenescenescenescenescenescenescenescene 7\n", &frame));
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame(std::string("scenescenescenescenescenescenescenescenescenescenescenescenescenescene 7\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("scenescenescenescenescenescenescenescenescenescenescenescenescenescene scenescenescenescenescenescenescenescenescenescenescenescenescenescene scenescenescenescenescenescenescenescenescenescenescenescenescenescene\n", &frame));
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame(std::string("scenescenescenescenescenescenescenescenescenescenescenescenescenescene scenescenescenescenescenescenescenescenescenescenescenescenescenescene scenescenescenescenescenescenescenescenescenescenescenescenescenescene\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame("", &frame));
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame(std::string("go_to_scene 256 20\n").c_str(), &frame));
 
     EXPECT_EQ(INVALID_FRAME, frame);
 
-    EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame("go_to_scene_b", &frame));
+    EXPECT_EQ(_ERR_PARSE_ERROR_, decode_command_to_frame(std::string("").c_str(), &frame));
+
+    EXPECT_EQ(INVALID_FRAME, frame);
+
+    EXPECT_EQ(_ERR_PARAMETER_MISSING_, decode_command_to_frame(std::string("go_to_scene_b\n").c_str(), &frame));
 }
 
 

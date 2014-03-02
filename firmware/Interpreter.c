@@ -18,7 +18,8 @@ typedef byte bool;
 #define FALSE 0
 #define TRUE !0
 
-#define MAX_COMMAND_LENGTH 64
+#define MAX_COMMAND_LENGTH 48
+#define MAX_VALUE_LENGTH  5
 
 const char identifier_message[] _PROGMEM = "DALI Master\r\n";
 
@@ -207,19 +208,9 @@ char nibble_to_ascii(uint8_t nibble)
 		return nibble + '0';
 	else
 		return nibble + 'A' - 0x0A;
-}	
+}
 
-/*char ascii_to_nibble(char nibble)
-{		
-	if(isdigit(nibble))
-		return nibble - '0';
-	else if(nibble >= 'A' && nibble <= 'F')
-		return nibble - 'A' + 0x0A;
-	else
-		return -1;
-}*/	
-
-inline int parse_int(char* string, int16_t* integer)
+inline int parse_int(const char* string, int16_t* integer)
 {
 	int16_t i = 0;
 	bool sign = FALSE;
@@ -257,12 +248,12 @@ inline int parse_int(char* string, int16_t* integer)
 	return _ERR_OK_;
 }
 
-int decode_command_to_frame(char* token, word* output)
+int decode_command_to_frame(const char* token, word* output)
 {
 	char command[MAX_COMMAND_LENGTH+1] = {0};
 	char compare_string[MAX_COMMAND_LENGTH] = {0};
-	char param1_string[MAX_COMMAND_LENGTH+1] = {0};
-	char param2_string[MAX_COMMAND_LENGTH+1] = {0};
+	char param1_string[MAX_VALUE_LENGTH+1] = {0};
+	char param2_string[MAX_VALUE_LENGTH+1] = {0};
 	bool has_param1 = FALSE;
 	bool has_param2 = FALSE;
 	int16_t param1 = 0;
@@ -300,7 +291,7 @@ int decode_command_to_frame(char* token, word* output)
 	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n') && (token[i] != '\r'); i++)
 	{
 		has_param1 = TRUE;
-		if(i-u >= MAX_COMMAND_LENGTH)
+		if(i-u >= MAX_VALUE_LENGTH)
 			return _ERR_PARSE_ERROR_;
 		param1_string[i-u] = token[i];
 	}
@@ -312,7 +303,7 @@ int decode_command_to_frame(char* token, word* output)
 	for(; (i < length) && (token[i] != ' ') && (token[i] != '\n') && (token[i] != '\r'); i++)
 	{
 		has_param2 = TRUE;
-		if(i-u >= MAX_COMMAND_LENGTH)
+		if(i-u >= MAX_VALUE_LENGTH)
 			return _ERR_PARSE_ERROR_;
 		param2_string[i-u] = token[i];
 	}

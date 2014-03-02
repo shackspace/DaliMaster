@@ -46,7 +46,7 @@ void suart_init()
     // und volle MCU clock 
     // IC Noise Cancel 
     // IC on Falling Edge 
-    TCCR1A = 0;
+    TCCR1A = (1<<COM1A1) |(1<<COM1B1);
     TCCR1B = (1 << WGM12) | (1 << CS10) | (0 << ICES1) | (1 << ICNC1);
 
     // OutputCompare für gewünschte Timer1 Frequenz 

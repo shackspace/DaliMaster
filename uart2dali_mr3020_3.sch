@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="6.4">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -15993,12 +15993,12 @@ Type: &lt;b&gt;SPC4077 / SPC 4078&lt;/b&gt;&lt;p&gt;</description>
 <part name="R9" library="resistor" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="R10" library="resistor" deviceset="R-EU_" device="R0603" value="10k"/>
 <part name="R8" library="resistor" deviceset="R-EU_" device="R0603" value="2k2"/>
-<part name="T1" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT3904LT1"/>
+<part name="T1" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT3904LT1" value="MMBT3904LT1"/>
 <part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="P+11" library="supply1" deviceset="+5V" device=""/>
 <part name="IC2" library="linear" deviceset="LM393" device="D"/>
-<part name="T3" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT3640LT1"/>
-<part name="T2" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT3904LT1"/>
+<part name="T3" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT3640LT1" value="MMBT3640LT1"/>
+<part name="T2" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT3904LT1" value="MMBT3904LT1"/>
 <part name="Q2" library="transistor-fet" deviceset="BSP170P" device=""/>
 <part name="Q1" library="transistor-fet" deviceset="?20*" device="SST" technology="1"/>
 <part name="GND21" library="supply1" deviceset="GNDA" device=""/>
